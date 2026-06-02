@@ -29,14 +29,83 @@ const QUOTES = [
   { text: "Move in silence.\nLet the results speak.", sig: "AP" },
 ];
 
-function getDailySelection(arr, count = 1) {
-  const today = new Date();
-  const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
-  const results = [];
-  for (let i = 0; i < count; i++) {
-    results.push(arr[(dayOfYear + i * 7) % arr.length]);
-  }
-  return count === 1 ? results[0] : results;
+function getDailyPick(arr, offset = 0) {
+  const d = new Date();
+  const day = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+  return arr[(day + offset) % arr.length];
+}
+
+// Shared styles
+const s = {
+  card: {
+    background: '#FFFFFF',
+    border: '1px solid rgba(61,46,34,0.07)',
+    borderRadius: '16px',
+    padding: '22px 24px',
+    boxShadow: '0 1px 4px rgba(61,46,34,0.03)',
+  },
+  cardTitle: {
+    fontFamily: "'Satoshi', sans-serif",
+    fontSize: '11px',
+    fontWeight: 700,
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    color: '#3D2E22',
+  },
+  cardAction: {
+    fontSize: '11px',
+    fontWeight: 500,
+    color: '#9C7B65',
+    cursor: 'pointer',
+    background: 'none',
+    border: 'none',
+    fontFamily: "'Satoshi', sans-serif",
+    padding: 0,
+  },
+  sectionLabel: {
+    fontFamily: "'Satoshi', sans-serif",
+    fontSize: '11px',
+    fontWeight: 600,
+    letterSpacing: '0.16em',
+    textTransform: 'uppercase',
+    color: '#9C7B65',
+    marginBottom: '18px',
+  },
+  barTrack: {
+    flex: 1,
+    height: '5px',
+    background: '#E8DDD2',
+    borderRadius: '3px',
+    overflow: 'hidden',
+  },
+  barFill: (w) => ({
+    width: w,
+    height: '100%',
+    background: '#9C7B65',
+    borderRadius: '3px',
+    transition: 'width 0.6s ease',
+  }),
+};
+
+function ProgressBar({ label, value }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+      <span style={{ fontSize: '12px', color: 'rgba(61,46,34,0.55)', fontWeight: 500, minWidth: '48px' }}>{label}</span>
+      <div style={s.barTrack}><div style={s.barFill(value)} /></div>
+    </div>
+  );
+}
+
+function GoalBar({ label, pct }) {
+  return (
+    <div style={{ marginBottom: '14px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+        <span style={{ fontSize: '13px', color: '#3D2E22' }}>{label}</span>
+        <span style={{ fontSize: '13px', color: '#9C7B65', fontWeight: 600 }}>{pct}%</span>
+      </div>
+      <div style={s.barTrack}><div style={s.barFill(`${pct}%`)} /></div>
+    </div>
+  );
 }
 
 export default function HomePage() {
@@ -45,14 +114,14 @@ export default function HomePage() {
   const hour = now.getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
   const dateStr = `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
-  
-  const affirmation = getDailySelection(AFFIRMATIONS);
-  const quote = getDailySelection(QUOTES);
+
+  const affirmation = getDailyPick(AFFIRMATIONS);
+  const quote = getDailyPick(QUOTES, 3);
 
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <p style={{ color: 'var(--text-soft)', fontFamily: 'var(--font-display)', fontSize: '18px', fontStyle: 'italic' }}>
+        <p style={{ color: 'rgba(61,46,34,0.5)', fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', fontStyle: 'italic' }}>
           Loading your dashboard...
         </p>
       </div>
@@ -60,463 +129,209 @@ export default function HomePage() {
   }
 
   return (
-    <div className="home">
-      {/* ── Hero Section ── */}
-      <section className="hero">
-        <div className="hero-text">
-          <p className="hero-greeting">{greeting}, Paige ✦</p>
-          <h1 className="hero-affirmation">{affirmation}</h1>
-          
-          <div className="hero-quote-block">
-            <span className="quote-mark">&ldquo;</span>
-            <p className="hero-quote">{quote.text}</p>
-            <p className="hero-sig">{quote.sig}</p>
+    <div style={{ animation: 'fadeIn 0.5s ease' }}>
+
+      {/* ── HERO ── */}
+      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center', marginBottom: '52px', minHeight: '420px' }}>
+        <div>
+          <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', color: 'rgba(61,46,34,0.5)', marginBottom: '12px' }}>
+            {greeting}, Paige ✦
+          </p>
+
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '46px', fontWeight: 400, color: '#3D2E22', lineHeight: 1.15, marginBottom: '32px', letterSpacing: '-0.01em' }}>
+            {affirmation}
+          </h1>
+
+          <div style={{ marginBottom: '36px', paddingLeft: '2px' }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '52px', color: 'rgba(196,169,142,0.5)', lineHeight: 0.5, display: 'block', marginBottom: '10px' }}>&ldquo;</span>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '21px', color: '#3D2E22', lineHeight: 1.55, whiteSpace: 'pre-line' }}>
+              {quote.text}
+            </p>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '18px', color: '#9C7B65', marginTop: '10px' }}>
+              {quote.sig}
+            </p>
           </div>
 
-          <button className="btn-primary hero-cta">
-            Plan My Day
-            <span>→</span>
+          <button style={{
+            display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '15px 36px',
+            background: '#6B4F3E', color: '#fff', border: 'none', borderRadius: '50px',
+            fontFamily: "'Satoshi', sans-serif", fontSize: '11.5px', fontWeight: 600,
+            letterSpacing: '0.14em', textTransform: 'uppercase', cursor: 'pointer',
+          }}>
+            Plan My Day <span>→</span>
           </button>
-          <p className="hero-date">{dateStr}</p>
+
+          <p style={{ fontSize: '10.5px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(61,46,34,0.3)', marginTop: '18px' }}>
+            {dateStr}
+          </p>
         </div>
 
-        <div className="hero-collage">
-          <div className="collage-grid">
-            <div className="collage-item collage-tall" style={{ background: 'linear-gradient(135deg, #D4C5B5, #C4A98E)' }}>
-              <div className="collage-placeholder-text">✦</div>
-            </div>
-            <div className="collage-item" style={{ background: 'linear-gradient(135deg, #E8DDD2, #D4C5B5)' }}>
-              <div className="collage-placeholder-text" style={{ fontSize: '14px', fontFamily: 'var(--font-display)', fontStyle: 'italic', padding: '20px', lineHeight: 1.5 }}>
-                {quote.text.split('\n')[0]}
-              </div>
-            </div>
-            <div className="collage-item" style={{ background: 'linear-gradient(135deg, #C4A98E, #9C7B65)' }}>
-              <div className="collage-placeholder-text">✦</div>
-            </div>
-            <div className="collage-item collage-wide" style={{ background: 'linear-gradient(135deg, #E8DDD2, #D4C5B5)' }}>
-              <div className="collage-placeholder-text">✦</div>
-            </div>
-            <div className="collage-item" style={{ background: 'linear-gradient(135deg, #D4C5B5, #B8A090)' }}>
-              <div className="collage-placeholder-text">✦</div>
-            </div>
+        {/* Collage */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '140px 120px 120px', gap: '5px', borderRadius: '20px', overflow: 'hidden' }}>
+          <div style={{ gridRow: 'span 2', background: 'linear-gradient(160deg, #D4C5B5 0%, #B8A090 100%)', display: 'flex', alignItems: 'flex-end', padding: '20px' }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '13px', fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>Images load with<br/>Unsplash integration</span>
           </div>
+          <div style={{ background: 'linear-gradient(135deg, #E8DDD2 0%, #D4C5B5 100%)' }} />
+          <div style={{ background: 'linear-gradient(135deg, #C4A98E 0%, #9C7B65 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.8)', textAlign: 'center', lineHeight: 1.45, padding: '12px' }}>
+              own lane.<br/>own race.<br/>own pace.
+            </span>
+          </div>
+          <div style={{ gridColumn: 'span 2', background: 'linear-gradient(135deg, #E2D6CA 0%, #C4A98E 100%)' }} />
         </div>
       </section>
 
-      {/* ── Today at a Glance ── */}
-      <section className="glance-section">
-        <p className="section-label">Today at a Glance</p>
-        
-        <div className="glance-grid">
+      {/* ── TODAY AT A GLANCE ── */}
+      <section style={{ marginBottom: '28px' }}>
+        <p style={s.sectionLabel}>Today at a Glance</p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' }}>
+
           {/* Daily Agenda */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Daily Agenda</span>
-              <button className="card-action">View full day</button>
+          <div style={s.card}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+              <span style={s.cardTitle}>Daily Agenda</span>
+              <button style={s.cardAction}>View full day</button>
             </div>
-            <div className="agenda-items">
-              <div className="agenda-item">
-                <span className="agenda-time">5:00 AM</span>
-                <span className="agenda-label">Morning Routine</span>
+            {[
+              ['5:00 AM', 'Morning Routine'],
+              ['5:30 AM', 'Gym Session'],
+              ['7:30 AM', 'GRE Study Block'],
+              ['9:30 AM', 'Workday Begins'],
+              ['6:00 PM', 'Therapy'],
+            ].map(([time, label], i) => (
+              <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'baseline', marginBottom: '11px' }}>
+                <span style={{ fontSize: '12px', color: 'rgba(61,46,34,0.38)', fontWeight: 500, minWidth: '58px', fontVariantNumeric: 'tabular-nums' }}>{time}</span>
+                <span style={{ fontSize: '13px', color: '#3D2E22' }}>{label}</span>
               </div>
-              <div className="agenda-item">
-                <span className="agenda-time">5:30 AM</span>
-                <span className="agenda-label">Gym Session</span>
-              </div>
-              <div className="agenda-item">
-                <span className="agenda-time">7:30 AM</span>
-                <span className="agenda-label">GRE Study Block</span>
-              </div>
-              <div className="agenda-item">
-                <span className="agenda-time">9:30 AM</span>
-                <span className="agenda-label">Workday Begins</span>
-              </div>
-              <div className="agenda-item">
-                <span className="agenda-time">6:00 PM</span>
-                <span className="agenda-label">Therapy</span>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Top Priorities */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Top Priorities</span>
-              <button className="card-action">Edit</button>
+          <div style={s.card}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+              <span style={s.cardTitle}>Top Priorities</span>
+              <button style={s.cardAction}>Edit</button>
             </div>
-            <div className="priority-items">
-              <label className="priority-item">
-                <input type="checkbox" className="priority-check" />
-                <span className="priority-text">GRE practice set</span>
+            {['GRE practice set', 'Awards follow-up', 'Meal prep planning'].map((text, i) => (
+              <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '13px', cursor: 'pointer' }}>
+                <span style={{
+                  width: '18px', height: '18px', borderRadius: '50%',
+                  border: '1.5px solid #D4C5B5', display: 'inline-block', flexShrink: 0,
+                }} />
+                <span style={{ fontSize: '13px', color: '#3D2E22' }}>{text}</span>
               </label>
-              <label className="priority-item">
-                <input type="checkbox" className="priority-check" />
-                <span className="priority-text">Awards follow-up</span>
-              </label>
-              <label className="priority-item">
-                <input type="checkbox" className="priority-check" />
-                <span className="priority-text">Meal prep planning</span>
-              </label>
-            </div>
+            ))}
           </div>
 
           {/* Personal Reminders */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Personal Reminders</span>
-              <button className="card-action">Add</button>
+          <div style={s.card}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+              <span style={s.cardTitle}>Personal Reminders</span>
+              <button style={s.cardAction}>Add</button>
             </div>
-            <div className="reminder-items">
-              <div className="reminder-item">
-                <span className="reminder-text">Hydrate more today</span>
-                <span className="reminder-tag">Daily</span>
+            {[
+              ['Hydrate more today', 'Daily'],
+              ['Book eyebrow appointment', 'This week'],
+              ['Peanut grooming', 'Due soon'],
+            ].map(([text, tag], i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '13px' }}>
+                <span style={{ fontSize: '13px', color: '#3D2E22' }}>{text}</span>
+                <span style={{ fontSize: '10px', color: '#9C7B65', fontWeight: 600, letterSpacing: '0.04em' }}>{tag}</span>
               </div>
-              <div className="reminder-item">
-                <span className="reminder-text">Book eyebrow appointment</span>
-                <span className="reminder-tag">This week</span>
-              </div>
-              <div className="reminder-item">
-                <span className="reminder-text">Peanut grooming</span>
-                <span className="reminder-tag">Due soon</span>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Wellness Check-In */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Wellness Check-In</span>
-              <button className="card-action">Log →</button>
+          <div style={s.card}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+              <span style={s.cardTitle}>Wellness Check-In</span>
+              <button style={s.cardAction}>Log →</button>
             </div>
-            <p className="wellness-prompt">How are you feeling today?</p>
-            <div className="mood-row">
+            <p style={{ fontSize: '13px', color: 'rgba(61,46,34,0.55)', marginBottom: '14px' }}>How are you feeling today?</p>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
               {['😔','😐','🙂','😊','✨'].map((m, i) => (
-                <button key={i} className="mood-btn">{m}</button>
+                <button key={i} style={{
+                  width: '36px', height: '36px', borderRadius: '50%',
+                  border: '1px solid rgba(61,46,34,0.08)', background: '#FAF7F3',
+                  cursor: 'pointer', fontSize: '16px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>{m}</button>
               ))}
             </div>
-            <div className="wellness-bars">
-              <div className="wellness-bar-row">
-                <span className="bar-label">Energy</span>
-                <div className="bar-track"><div className="bar-fill" style={{ width: '70%' }} /></div>
-              </div>
-              <div className="wellness-bar-row">
-                <span className="bar-label">Sleep</span>
-                <div className="bar-track"><div className="bar-fill" style={{ width: '80%' }} /></div>
-              </div>
-            </div>
+            <ProgressBar label="Energy" value="70%" />
+            <ProgressBar label="Sleep" value="80%" />
           </div>
         </div>
       </section>
 
-      {/* ── Bottom Row ── */}
-      <section className="bottom-section">
-        <div className="bottom-grid">
+      {/* ── BOTTOM ROW ── */}
+      <section style={{ marginBottom: '28px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+
           {/* Goal Progress */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Goal Progress</span>
-              <button className="card-action">View All Goals</button>
+          <div style={s.card}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <span style={s.cardTitle}>Goal Progress</span>
+              <button style={s.cardAction}>View All Goals</button>
             </div>
-            <div className="goal-items">
-              <div className="goal-item">
-                <div className="goal-info"><span>GRE Prep</span><span className="goal-pct">45%</span></div>
-                <div className="bar-track"><div className="bar-fill" style={{ width: '45%' }} /></div>
-              </div>
-              <div className="goal-item">
-                <div className="goal-info"><span>Wellness</span><span className="goal-pct">72%</span></div>
-                <div className="bar-track"><div className="bar-fill" style={{ width: '72%' }} /></div>
-              </div>
-              <div className="goal-item">
-                <div className="goal-info"><span>Awards</span><span className="goal-pct">30%</span></div>
-                <div className="bar-track"><div className="bar-fill" style={{ width: '30%' }} /></div>
-              </div>
-            </div>
+            <GoalBar label="GRE Prep" pct={45} />
+            <GoalBar label="Wellness" pct={72} />
+            <GoalBar label="Awards" pct={30} />
           </div>
 
           {/* Personal Intentions */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Personal Intentions</span>
-              <button className="card-action">This Month</button>
+          <div style={s.card}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <span style={s.cardTitle}>Personal Intentions</span>
+              <button style={s.cardAction}>This Month</button>
             </div>
-            <div className="intention-items">
-              <div className="intention-item">
-                <span className="intention-icon">✦</span>
-                <span>Be present in every moment</span>
+            {['Be present in every moment', 'Create with purpose and passion', 'Protect my peace and my time'].map((t, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                <span style={{ color: '#9C7B65', fontSize: '8px' }}>✦</span>
+                <span style={{ fontSize: '13.5px', color: '#3D2E22', lineHeight: 1.5 }}>{t}</span>
               </div>
-              <div className="intention-item">
-                <span className="intention-icon">✦</span>
-                <span>Create with purpose and passion</span>
-              </div>
-              <div className="intention-item">
-                <span className="intention-icon">✦</span>
-                <span>Protect my peace and my time</span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── Weekly Insight Banner ── */}
-      <section className="insight-banner">
-        <div className="insight-inner">
-          <div>
-            <p className="insight-title">Weekly Insight</p>
-            <p className="insight-text">Small, consistent actions create big, undeniable shifts.</p>
-          </div>
-          <button className="btn-primary" style={{ fontSize: '11px', padding: '12px 24px' }}>
-            Read This Week&apos;s Insight →
-          </button>
+      {/* ── WEEKLY INSIGHT ── */}
+      <section style={{
+        ...s.card,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px',
+        padding: '28px 32px', marginBottom: '32px',
+      }}>
+        <div>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', color: '#3D2E22', marginBottom: '4px' }}>Weekly Insight</p>
+          <p style={{ fontSize: '14px', color: 'rgba(61,46,34,0.55)' }}>Small, consistent actions create big, undeniable shifts.</p>
         </div>
+        <button style={{
+          display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px',
+          background: '#6B4F3E', color: '#fff', border: 'none', borderRadius: '50px',
+          fontFamily: "'Satoshi', sans-serif", fontSize: '11px', fontWeight: 600,
+          letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap',
+        }}>
+          Read This Week&apos;s Insight →
+        </button>
       </section>
 
-      <style jsx>{`
-        .home {
-          animation: fadeIn 0.4s ease;
-        }
-
+      <style jsx global>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ── Hero ── */
-        .hero {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 48px;
-          align-items: center;
-          margin-bottom: 48px;
-          min-height: 380px;
-        }
-
-        .hero-greeting {
-          font-family: var(--font-body);
-          font-size: 15px;
-          color: var(--text-soft);
-          font-weight: 400;
-          margin-bottom: 12px;
-          letter-spacing: 0.01em;
-        }
-
-        .hero-affirmation {
-          font-family: var(--font-display);
-          font-size: 42px;
-          font-weight: 400;
-          color: var(--text);
-          line-height: 1.2;
-          margin-bottom: 28px;
-          letter-spacing: -0.01em;
-        }
-
-        .hero-quote-block {
-          position: relative;
-          margin-bottom: 32px;
-          padding-left: 4px;
-        }
-
-        .quote-mark {
-          font-family: var(--font-display);
-          font-size: 48px;
-          color: var(--accent-light);
-          line-height: 0.6;
-          display: block;
-          margin-bottom: 4px;
-        }
-
-        .hero-quote {
-          font-family: var(--font-display);
-          font-style: italic;
-          font-size: 20px;
-          font-weight: 400;
-          color: var(--text);
-          line-height: 1.5;
-          white-space: pre-line;
-        }
-
-        .hero-sig {
-          font-family: var(--font-display);
-          font-style: italic;
-          font-size: 18px;
-          color: var(--accent);
-          margin-top: 8px;
-        }
-
-        .hero-cta {
-          margin-bottom: 16px;
-        }
-
-        .hero-date {
-          font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: var(--text-muted);
-        }
-
-        /* ── Collage ── */
-        .collage-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: 1fr 1fr 1fr;
-          gap: 6px;
-          height: 380px;
-          border-radius: var(--radius-lg);
-          overflow: hidden;
-        }
-
-        .collage-item {
-          border-radius: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-        }
-
-        .collage-tall {
-          grid-row: span 2;
-        }
-
-        .collage-wide {
-          grid-column: span 2;
-        }
-
-        .collage-placeholder-text {
-          color: rgba(255,255,255,0.4);
-          font-size: 24px;
-        }
-
-        /* ── Glance Section ── */
-        .glance-section {
-          margin-bottom: 32px;
-        }
-
-        .glance-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 16px;
-        }
-
-        /* ── Agenda ── */
-        .agenda-items { display: flex; flex-direction: column; gap: 12px; }
-        .agenda-item { display: flex; gap: 14px; align-items: baseline; }
-        .agenda-time { font-size: 12px; color: var(--text-muted); font-weight: 500; min-width: 60px; font-variant-numeric: tabular-nums; }
-        .agenda-label { font-size: 13px; color: var(--text); font-weight: 400; }
-
-        /* ── Priorities ── */
-        .priority-items { display: flex; flex-direction: column; gap: 12px; }
-        .priority-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .priority-check {
-          width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--tertiary);
-          appearance: none; -webkit-appearance: none; cursor: pointer;
-          transition: all 0.2s; flex-shrink: 0;
-        }
-        .priority-check:checked {
-          background: var(--accent); border-color: var(--accent);
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
-          background-size: 12px; background-position: center; background-repeat: no-repeat;
-        }
-        .priority-text { font-size: 13px; color: var(--text); }
-
-        /* ── Reminders ── */
-        .reminder-items { display: flex; flex-direction: column; gap: 12px; }
-        .reminder-item { display: flex; justify-content: space-between; align-items: center; }
-        .reminder-text { font-size: 13px; color: var(--text); }
-        .reminder-tag { font-size: 11px; color: var(--accent); font-weight: 500; }
-
-        /* ── Wellness ── */
-        .wellness-prompt { font-size: 13px; color: var(--text-soft); margin-bottom: 12px; }
-        .mood-row { display: flex; gap: 8px; margin-bottom: 16px; }
-        .mood-btn {
-          width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
-          background: var(--surface-warm); cursor: pointer; font-size: 16px;
-          display: flex; align-items: center; justify-content: center;
-          transition: all 0.15s;
-        }
-        .mood-btn:hover { border-color: var(--accent); transform: scale(1.1); }
-        .wellness-bars { display: flex; flex-direction: column; gap: 10px; }
-        .wellness-bar-row { display: flex; align-items: center; gap: 10px; }
-        .bar-label { font-size: 12px; color: var(--text-soft); min-width: 48px; font-weight: 500; }
-        .bar-track { flex: 1; height: 6px; background: var(--secondary); border-radius: 3px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.6s ease; }
-
-        /* ── Goals ── */
-        .goal-items { display: flex; flex-direction: column; gap: 14px; }
-        .goal-item { display: flex; flex-direction: column; gap: 6px; }
-        .goal-info { display: flex; justify-content: space-between; font-size: 13px; }
-        .goal-pct { color: var(--accent); font-weight: 500; }
-
-        /* ── Intentions ── */
-        .intention-items { display: flex; flex-direction: column; gap: 14px; }
-        .intention-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text); }
-        .intention-icon { color: var(--accent); font-size: 10px; }
-
-        /* ── Bottom Section ── */
-        .bottom-section { margin-bottom: 32px; }
-        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-        /* ── Insight Banner ── */
-        .insight-banner {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          padding: 28px 32px;
-          margin-bottom: 32px;
-          box-shadow: var(--shadow-sm);
-        }
-        .insight-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-        .insight-title {
-          font-family: var(--font-display);
-          font-size: 20px;
-          font-weight: 400;
-          color: var(--text);
-          margin-bottom: 4px;
-        }
-        .insight-text { font-size: 14px; color: var(--text-soft); }
-
-        /* ── Mobile ── */
         @media (max-width: 1024px) {
-          .glance-grid { grid-template-columns: repeat(2, 1fr); }
+          .home-glance-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
 
         @media (max-width: 768px) {
-          .hero {
-            grid-template-columns: 1fr;
-            gap: 28px;
-            min-height: auto;
-            margin-bottom: 32px;
-          }
-
-          .hero-affirmation {
-            font-size: 32px;
-          }
-
-          .hero-quote {
-            font-size: 17px;
-          }
-
-          .collage-grid {
-            height: 260px;
-          }
-
-          .hero-cta {
-            width: 100%;
-            justify-content: center;
-          }
-
-          .glance-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .bottom-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .insight-inner {
-            flex-direction: column;
-            text-align: center;
-            gap: 16px;
-          }
+          .home-hero { grid-template-columns: 1fr !important; gap: 24px !important; min-height: auto !important; }
+          .home-hero h1 { font-size: 34px !important; }
+          .home-glance-grid { grid-template-columns: 1fr !important; }
+          .home-bottom-grid { grid-template-columns: 1fr !important; }
+          .home-insight { flex-direction: column !important; text-align: center !important; }
         }
       `}</style>
     </div>
