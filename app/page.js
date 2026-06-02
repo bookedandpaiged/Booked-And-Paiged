@@ -35,7 +35,9 @@ function getDailyPick(arr, offset = 0) {
   return arr[(day + offset) % arr.length];
 }
 
-// Shared styles
+const serif = "'Cormorant Garamond', Georgia, serif";
+const sans = "'Satoshi', -apple-system, sans-serif";
+
 const s = {
   card: {
     background: '#FFFFFF',
@@ -45,11 +47,10 @@ const s = {
     boxShadow: '0 1px 4px rgba(61,46,34,0.03)',
   },
   cardTitle: {
-    fontFamily: "'Satoshi', sans-serif",
-    fontSize: '11px',
-    fontWeight: 700,
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
+    fontFamily: sans,
+    fontSize: '13px',
+    fontWeight: 600,
+    letterSpacing: '0.02em',
     color: '#3D2E22',
   },
   cardAction: {
@@ -59,11 +60,11 @@ const s = {
     cursor: 'pointer',
     background: 'none',
     border: 'none',
-    fontFamily: "'Satoshi', sans-serif",
+    fontFamily: sans,
     padding: 0,
   },
   sectionLabel: {
-    fontFamily: "'Satoshi', sans-serif",
+    fontFamily: sans,
     fontSize: '11px',
     fontWeight: 600,
     letterSpacing: '0.16em',
@@ -108,6 +109,39 @@ function GoalBar({ label, pct }) {
   );
 }
 
+function MoodIcon({ type }) {
+  const base = { width: '36px', height: '36px', borderRadius: '50%', border: '1px solid rgba(61,46,34,0.08)', background: '#FAF7F3', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' };
+  const iconColor = '#9C7B65';
+  const icons = {
+    low: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="1.5" strokeLinecap="round">
+        <circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><circle cx="9" cy="9" r="1" fill={iconColor}/><circle cx="15" cy="9" r="1" fill={iconColor}/>
+      </svg>
+    ),
+    okay: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="1.5" strokeLinecap="round">
+        <circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><circle cx="9" cy="9" r="1" fill={iconColor}/><circle cx="15" cy="9" r="1" fill={iconColor}/>
+      </svg>
+    ),
+    good: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="1.5" strokeLinecap="round">
+        <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="9" r="1" fill={iconColor}/><circle cx="15" cy="9" r="1" fill={iconColor}/>
+      </svg>
+    ),
+    great: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="1.5" strokeLinecap="round">
+        <circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><circle cx="9" cy="9" r="1" fill={iconColor}/><circle cx="15" cy="9" r="1" fill={iconColor}/>
+      </svg>
+    ),
+    amazing: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="1.5" strokeLinecap="round">
+        <circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><path d="M7 8.5L9.5 9.5L7 10.5"/><path d="M17 8.5L14.5 9.5L17 10.5"/>
+      </svg>
+    ),
+  };
+  return <button style={base}>{icons[type]}</button>;
+}
+
 export default function HomePage() {
   const { data, loading } = useData();
   const now = new Date();
@@ -121,7 +155,7 @@ export default function HomePage() {
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <p style={{ color: 'rgba(61,46,34,0.5)', fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', fontStyle: 'italic' }}>
+        <p style={{ color: 'rgba(61,46,34,0.5)', fontFamily: serif, fontSize: '20px', fontStyle: 'italic' }}>
           Loading your dashboard...
         </p>
       </div>
@@ -134,20 +168,20 @@ export default function HomePage() {
       {/* ── HERO ── */}
       <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center', marginBottom: '52px', minHeight: '420px' }}>
         <div>
-          <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', color: 'rgba(61,46,34,0.5)', marginBottom: '12px' }}>
+          <p style={{ fontFamily: sans, fontSize: '15px', color: 'rgba(61,46,34,0.5)', marginBottom: '12px' }}>
             {greeting}, Paige ✦
           </p>
 
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '46px', fontWeight: 400, color: '#3D2E22', lineHeight: 1.15, marginBottom: '32px', letterSpacing: '-0.01em' }}>
+          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '44px', fontWeight: 400, color: '#3D2E22', lineHeight: 1.18, marginBottom: '32px', letterSpacing: '-0.01em' }}>
             {affirmation}
           </h1>
 
           <div style={{ marginBottom: '36px', paddingLeft: '2px' }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '52px', color: 'rgba(196,169,142,0.5)', lineHeight: 0.5, display: 'block', marginBottom: '10px' }}>&ldquo;</span>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '21px', color: '#3D2E22', lineHeight: 1.55, whiteSpace: 'pre-line' }}>
+            <span style={{ fontFamily: serif, fontSize: '52px', color: 'rgba(196,169,142,0.5)', lineHeight: 0.5, display: 'block', marginBottom: '10px' }}>&ldquo;</span>
+            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '21px', color: '#3D2E22', lineHeight: 1.55, whiteSpace: 'pre-line' }}>
               {quote.text}
             </p>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '18px', color: '#9C7B65', marginTop: '10px' }}>
+            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '18px', color: '#9C7B65', marginTop: '10px' }}>
               {quote.sig}
             </p>
           </div>
@@ -155,13 +189,13 @@ export default function HomePage() {
           <button style={{
             display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '15px 36px',
             background: '#6B4F3E', color: '#fff', border: 'none', borderRadius: '50px',
-            fontFamily: "'Satoshi', sans-serif", fontSize: '11.5px', fontWeight: 600,
+            fontFamily: sans, fontSize: '11.5px', fontWeight: 600,
             letterSpacing: '0.14em', textTransform: 'uppercase', cursor: 'pointer',
           }}>
             Plan My Day <span>→</span>
           </button>
 
-          <p style={{ fontSize: '10.5px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(61,46,34,0.3)', marginTop: '18px' }}>
+          <p style={{ fontSize: '10.5px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(61,46,34,0.3)', marginTop: '18px', fontFamily: sans }}>
             {dateStr}
           </p>
         </div>
@@ -169,11 +203,11 @@ export default function HomePage() {
         {/* Collage */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '140px 120px 120px', gap: '5px', borderRadius: '20px', overflow: 'hidden' }}>
           <div style={{ gridRow: 'span 2', background: 'linear-gradient(160deg, #D4C5B5 0%, #B8A090 100%)', display: 'flex', alignItems: 'flex-end', padding: '20px' }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '13px', fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>Images load with<br/>Unsplash integration</span>
+            <span style={{ fontFamily: serif, fontSize: '13px', fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>Images load with<br/>Unsplash integration</span>
           </div>
           <div style={{ background: 'linear-gradient(135deg, #E8DDD2 0%, #D4C5B5 100%)' }} />
           <div style={{ background: 'linear-gradient(135deg, #C4A98E 0%, #9C7B65 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.8)', textAlign: 'center', lineHeight: 1.45, padding: '12px' }}>
+            <span style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.85)', textAlign: 'center', lineHeight: 1.45, padding: '12px' }}>
               own lane.<br/>own race.<br/>own pace.
             </span>
           </div>
@@ -235,9 +269,9 @@ export default function HomePage() {
               ['Book eyebrow appointment', 'This week'],
               ['Peanut grooming', 'Due soon'],
             ].map(([text, tag], i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '13px' }}>
-                <span style={{ fontSize: '13px', color: '#3D2E22' }}>{text}</span>
-                <span style={{ fontSize: '10px', color: '#9C7B65', fontWeight: 600, letterSpacing: '0.04em' }}>{tag}</span>
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '13px', gap: '12px' }}>
+                <span style={{ fontSize: '13px', color: '#3D2E22', flex: 1 }}>{text}</span>
+                <span style={{ fontSize: '10px', color: '#9C7B65', fontWeight: 600, letterSpacing: '0.04em', flexShrink: 0, paddingTop: '2px' }}>{tag}</span>
               </div>
             ))}
           </div>
@@ -250,14 +284,11 @@ export default function HomePage() {
             </div>
             <p style={{ fontSize: '13px', color: 'rgba(61,46,34,0.55)', marginBottom: '14px' }}>How are you feeling today?</p>
             <div style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
-              {['😔','😐','🙂','😊','✨'].map((m, i) => (
-                <button key={i} style={{
-                  width: '36px', height: '36px', borderRadius: '50%',
-                  border: '1px solid rgba(61,46,34,0.08)', background: '#FAF7F3',
-                  cursor: 'pointer', fontSize: '16px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>{m}</button>
-              ))}
+              <MoodIcon type="low" />
+              <MoodIcon type="okay" />
+              <MoodIcon type="good" />
+              <MoodIcon type="great" />
+              <MoodIcon type="amazing" />
             </div>
             <ProgressBar label="Energy" value="70%" />
             <ProgressBar label="Sleep" value="80%" />
@@ -303,13 +334,13 @@ export default function HomePage() {
         padding: '28px 32px', marginBottom: '32px',
       }}>
         <div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', color: '#3D2E22', marginBottom: '4px' }}>Weekly Insight</p>
-          <p style={{ fontSize: '14px', color: 'rgba(61,46,34,0.55)' }}>Small, consistent actions create big, undeniable shifts.</p>
+          <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '22px', color: '#3D2E22', marginBottom: '4px' }}>Weekly Insight</p>
+          <p style={{ fontSize: '14px', color: 'rgba(61,46,34,0.55)', fontFamily: sans }}>Small, consistent actions create big, undeniable shifts.</p>
         </div>
         <button style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px',
           background: '#6B4F3E', color: '#fff', border: 'none', borderRadius: '50px',
-          fontFamily: "'Satoshi', sans-serif", fontSize: '11px', fontWeight: 600,
+          fontFamily: sans, fontSize: '11px', fontWeight: 600,
           letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap',
         }}>
           Read This Week&apos;s Insight →
@@ -320,18 +351,6 @@ export default function HomePage() {
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 1024px) {
-          .home-glance-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-
-        @media (max-width: 768px) {
-          .home-hero { grid-template-columns: 1fr !important; gap: 24px !important; min-height: auto !important; }
-          .home-hero h1 { font-size: 34px !important; }
-          .home-glance-grid { grid-template-columns: 1fr !important; }
-          .home-bottom-grid { grid-template-columns: 1fr !important; }
-          .home-insight { flex-direction: column !important; text-align: center !important; }
         }
       `}</style>
     </div>
