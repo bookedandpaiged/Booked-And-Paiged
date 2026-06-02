@@ -5,7 +5,7 @@ import StatusBar from './components/StatusBar';
 
 export const metadata = {
   title: 'Booked & Paiged',
-  description: 'Personal life dashboard',
+  description: 'Your life. Intentionally managed.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -17,7 +17,7 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#F8F4EF',
+  themeColor: '#F6F1EB',
 };
 
 export default function RootLayout({ children }) {

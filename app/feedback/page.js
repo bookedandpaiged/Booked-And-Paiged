@@ -9,7 +9,7 @@ export default function FeedbackPage() {
       </div>
       <div className="module-placeholder">
         <div className="icon">✎</div>
-        <h2>Feedback Log</h2>
+        <h2>App Feedback</h2>
         <p>Your running list of app improvements, feature requests, and notes for the next iteration will live here.</p>
       </div>
     </div>

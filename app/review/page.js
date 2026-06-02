@@ -9,7 +9,7 @@ export default function ReviewPage() {
       </div>
       <div className="module-placeholder">
         <div className="icon">◇</div>
-        <h2>Weekly & Quarterly Reviews</h2>
+        <h2>Weekly Review</h2>
         <p>Your structured weekly check-ins and quarterly deep dives will live here, with a full archive of past reviews.</p>
       </div>
     </div>

@@ -9,7 +9,7 @@ export default function RemindersPage() {
       </div>
       <div className="module-placeholder">
         <div className="icon">○</div>
-        <h2>Reminders Module</h2>
+        <h2>Reminders</h2>
         <p>Your recurring life tasks, bill tracker, cleaning schedule, and running to-do list will live here.</p>
       </div>
     </div>

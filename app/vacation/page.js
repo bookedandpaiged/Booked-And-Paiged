@@ -9,7 +9,7 @@ export default function VacationPage() {
       </div>
       <div className="module-placeholder">
         <div className="icon">△</div>
-        <h2>Vacation Module</h2>
+        <h2>Vacation Planning</h2>
         <p>Your trip brainstorming board, structured itineraries, and PTO balance tracker will live here.</p>
       </div>
     </div>

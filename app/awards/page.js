@@ -9,7 +9,7 @@ export default function AwardsPage() {
       </div>
       <div className="module-placeholder">
         <div className="icon">✧</div>
-        <h2>Awards Module</h2>
+        <h2>Awards Campaign</h2>
         <p>Your 2026 awards campaign tracker with submission timelines, required materials, and daily rhythm tasks will live here.</p>
       </div>
     </div>
