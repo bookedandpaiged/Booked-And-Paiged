@@ -44,7 +44,7 @@ var text = '#6B5A50';        /* body text - neutral nude brown */
 var textSoft = 'rgba(93,66,51,0.55)'; /* secondary text */
 var textMuted = 'rgba(93,66,51,0.35)'; /* muted, timestamps */
 var accent = '#9C7B65';      /* links, accents */
-var quoteColor = '#8B6E5A';  /* quotes, signature, quotation mark */
+var quoteColor = '#7A5F4C';  /* quotes, signature, quotation mark */
 
 var card = {
   background: '#FFFFFF',
@@ -113,22 +113,19 @@ export default function HomePage() {
     <div style={{ animation: 'fadeIn 0.5s ease' }}>
 
       {/* HERO */}
-      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center', marginBottom: '0', minHeight: '420px' }}>
+      <section style={{ display: 'grid', gridTemplateColumns: '5fr 7fr', gap: '40px', alignItems: 'center', marginBottom: '0', minHeight: '420px' }}>
         <div>
-          <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '18px', color: textSoft, marginBottom: '14px' }}>
-            {greeting}, Paige <span style={{ fontSize: '14px' }}>&#9825;</span>
-          </p>
-
-          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '36px', fontWeight: 400, color: '#96785E', lineHeight: 1.18, marginBottom: '32px', maxWidth: '480px' }}>
+          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '36px', fontWeight: 400, color: '#7D6450', lineHeight: 1.18, marginBottom: '32px', maxWidth: '360px' }}>
             {affirmation}
           </h1>
 
           <div style={{ marginBottom: '36px' }}>
-            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '26px', color: quoteColor, lineHeight: 1.5, maxWidth: '440px' }}>
+            <p style={{ fontFamily: sans, fontSize: '10px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: textMuted, marginBottom: '10px' }}>Quote of the day</p>
+            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '26px', color: '#7D6450', lineHeight: 1.5, maxWidth: '420px' }}>
               <span style={{ fontSize: '36px', marginRight: '4px', verticalAlign: 'top', lineHeight: '0.9' }}>&ldquo;</span>
               {quote.text}
             </p>
-            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '20px', color: quoteColor, marginTop: '10px' }}>
+            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '20px', color: '#7D6450', marginTop: '10px' }}>
               - {quote.sig}
             </p>
           </div>
