@@ -208,12 +208,12 @@ export default function Sidebar() {
         .topnav-links {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 0;
           margin: 0 auto;
         }
-
+justify-content: center; flex: 1;
         .topnav-link {
-          padding: 8px 22px;
+          padding: 8px 28px;
           font-size: 12.5px;
           font-weight: 500;
           letter-spacing: 0.04em;
