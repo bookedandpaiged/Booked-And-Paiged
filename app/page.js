@@ -334,7 +334,7 @@ export default function HomePage() {
         padding: '28px 32px', marginBottom: '32px',
       }}>
         <div>
-          <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '22px', color: '#3D2E22', marginBottom: '4px' }}>Weekly Insight</p>
+          <p style={{fontFamily: sans, fontSize: '18px', fontWeight: 600, color: '#3D2E22', marginBottom: '4px' }}>Weekly Insight</p>
           <p style={{ fontSize: '14px', color: 'rgba(61,46,34,0.55)', fontFamily: sans }}>Small, consistent actions create big, undeniable shifts.</p>
         </div>
         <button style={{
