@@ -40,7 +40,7 @@ var sans = "'Satoshi', -apple-system, sans-serif";
 
 /* Color system */
 var brown = '#5D4233';       /* section headers, icons - darker */
-var text = '#8B6E5A';        /* body text - lighter warm */
+var text = '#7A5F4C';        /* body text - warm mid-brown */
 var textSoft = 'rgba(93,66,51,0.55)'; /* secondary text */
 var textMuted = 'rgba(93,66,51,0.35)'; /* muted, timestamps */
 var accent = '#9C7B65';      /* links, accents */
@@ -116,15 +116,15 @@ export default function HomePage() {
       <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center', marginBottom: '0', minHeight: '420px' }}>
         <div>
           <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '18px', color: textSoft, marginBottom: '14px' }}>
-            {greeting}, Paige <span style={{ fontSize: '12px' }}>&#10022;</span>
+            {greeting}, Paige <span style={{ fontSize: '14px' }}>&#9825;</span>
           </p>
 
-          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '36px', fontWeight: 400, color: '#A68A72', lineHeight: 1.18, marginBottom: '32px', maxWidth: '520px' }}>
+          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '36px', fontWeight: 400, color: '#96785E', lineHeight: 1.18, marginBottom: '32px', maxWidth: '480px' }}>
             {affirmation}
           </h1>
 
           <div style={{ marginBottom: '36px' }}>
-            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '26px', color: quoteColor, lineHeight: 1.5, maxWidth: '480px' }}>
+            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '26px', color: quoteColor, lineHeight: 1.5, maxWidth: '440px' }}>
               <span style={{ fontSize: '36px', marginRight: '4px', verticalAlign: 'top', lineHeight: '0.9' }}>&ldquo;</span>
               {quote.text}
             </p>
