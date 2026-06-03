@@ -31,7 +31,6 @@ function NavIcon({ type, active }) {
   const color = active ? 'var(--accent-dark)' : 'var(--text-muted)';
   const stroke = color;
   const size = 22;
-  
   const icons = {
     home: (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -65,7 +64,6 @@ function NavIcon({ type, active }) {
       </svg>
     ),
   };
-
   return icons[type] || null;
 }
 
@@ -80,7 +78,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ── Desktop Top Navigation ── */}
       <header className="topnav">
         <div className="topnav-inner">
           <Link href="/" className="topnav-brand">
@@ -121,7 +118,6 @@ export default function Sidebar() {
         </div>
       </header>
 
-      {/* ── Mobile Bottom Navigation ── */}
       <nav className="mobile-nav">
         {MOBILE_NAV.map((item) => {
           if (item.href === '/more') {
@@ -150,7 +146,6 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* ── Mobile More Menu Overlay ── */}
       {mobileMoreOpen && (
         <div className="mobile-more-overlay" onClick={() => setMobileMoreOpen(false)}>
           <div className="mobile-more-sheet" onClick={(e) => e.stopPropagation()}>
@@ -169,7 +164,6 @@ export default function Sidebar() {
       )}
 
       <style jsx>{`
-        /* ── Desktop Top Nav ── */
         .topnav {
           position: fixed;
           top: 0;
@@ -195,6 +189,7 @@ export default function Sidebar() {
 
         .topnav-brand {
           text-decoration: none;
+          flex-shrink: 0;
         }
 
         .brand-text {
@@ -208,12 +203,13 @@ export default function Sidebar() {
         .topnav-links {
           display: flex;
           align-items: center;
-          gap: 0;
-          margin: 0 auto;
+          justify-content: center;
+          flex: 1;
+          gap: 12px;
         }
-justify-content: center; flex: 1;
+
         .topnav-link {
-          padding: 8px 28px;
+          padding: 8px 22px;
           font-size: 12.5px;
           font-weight: 500;
           letter-spacing: 0.04em;
@@ -285,6 +281,7 @@ justify-content: center; flex: 1;
           display: flex;
           align-items: center;
           gap: 12px;
+          flex-shrink: 0;
         }
 
         .topnav-icon-btn {
@@ -320,7 +317,6 @@ justify-content: center; flex: 1;
           letter-spacing: 0.02em;
         }
 
-        /* ── Mobile Nav ── */
         .mobile-nav {
           display: none;
           position: fixed;
@@ -362,7 +358,6 @@ justify-content: center; flex: 1;
           letter-spacing: 0.02em;
         }
 
-        /* ── Mobile More Overlay ── */
         .mobile-more-overlay {
           display: none;
           position: fixed;
@@ -401,13 +396,11 @@ justify-content: center; flex: 1;
           .topnav {
             display: none;
           }
-
           .mobile-nav {
             display: flex;
             align-items: center;
             justify-content: space-around;
           }
-
           .mobile-more-overlay {
             display: block;
           }
