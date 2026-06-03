@@ -39,8 +39,8 @@ var serif = "'Cormorant Garamond', Georgia, serif";
 var sans = "'Satoshi', -apple-system, sans-serif";
 
 /* Color system */
-var brown = '#8B6E5A';       /* section headers, icons */
-var text = '#5D4233';        /* body text */
+var brown = '#5D4233';       /* section headers, icons - darker */
+var text = '#8B6E5A';        /* body text - lighter warm */
 var textSoft = 'rgba(93,66,51,0.55)'; /* secondary text */
 var textMuted = 'rgba(93,66,51,0.35)'; /* muted, timestamps */
 var accent = '#9C7B65';      /* links, accents */
@@ -116,15 +116,15 @@ export default function HomePage() {
       <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center', marginBottom: '0', minHeight: '420px' }}>
         <div>
           <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '18px', color: textSoft, marginBottom: '14px' }}>
-            {greeting}, Paige &#10022;
+            {greeting}, Paige <span style={{ fontSize: '12px' }}>&#10022;</span>
           </p>
 
-          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '36px', fontWeight: 400, color: '#B89B82', lineHeight: 1.18, marginBottom: '32px' }}>
+          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '36px', fontWeight: 400, color: '#A68A72', lineHeight: 1.18, marginBottom: '32px', maxWidth: '520px' }}>
             {affirmation}
           </h1>
 
           <div style={{ marginBottom: '36px' }}>
-            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '26px', color: quoteColor, lineHeight: 1.5 }}>
+            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '26px', color: quoteColor, lineHeight: 1.5, maxWidth: '480px' }}>
               <span style={{ fontSize: '36px', marginRight: '4px', verticalAlign: 'top', lineHeight: '0.9' }}>&ldquo;</span>
               {quote.text}
             </p>
@@ -171,7 +171,7 @@ export default function HomePage() {
           </div>
           <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #E8DDD2, #D4C5B5)', flexShrink: 0 }} />
           <div style={{ flex: 1 }} />
-          <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '14px', color: textSoft }}>Your day, intentionally designed.</p>
+          <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '14px', color: '#8B6E5A' }}>Your day, intentionally designed.</p>
         </div>
 
         <p style={sectionLabel}>Today at a Glance</p>

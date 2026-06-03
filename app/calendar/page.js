@@ -14,14 +14,14 @@ export default function CalendarPage() {
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9C7B65" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18"/><path d="M8 2v4"/><path d="M16 2v4"/></svg>
           Planner
         </h1>
-        <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'italic', fontStyle: 'italic' }}>Your unified calendar across all modules</p>
+        <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'italic', fontSize: '16px', letterSpacing: '0.03em', fontStyle: 'italic' }}>Your unified calendar across all modules</p>
       </div>
       <div className="card" style={{ padding: '28px 32px', background: '#fff', border: '1px solid rgba(61,46,34,0.07)', borderRadius: '16px', boxShadow: '0 1px 4px rgba(61,46,34,0.03)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'italic', fontSize: '24px', fontWeight: 400 }}>{MONTHS[month]} {year}</h2>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'italic', fontSize: '16px', letterSpacing: '0.03em', fontSize: '24px', fontWeight: 400 }}>{MONTHS[month]} {year}</h2>
           <div style={{ display: 'flex', gap: '6px' }}>
             {['Month','Week','Day'].map(function(v) {
-              return <button key={v} style={{ padding: '7px 16px', borderRadius: '20px', border: v === 'Month' ? 'none' : '1px solid rgba(61,46,34,0.07)', background: v === 'Month' ? '#6B4F3E' : 'transparent', color: v === 'Month' ? '#fff' : 'rgba(61,46,34,0.55)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'italic' }}>{v}</button>;
+              return <button key={v} style={{ padding: '7px 16px', borderRadius: '20px', border: v === 'Month' ? 'none' : '1px solid rgba(61,46,34,0.07)', background: v === 'Month' ? '#6B4F3E' : 'transparent', color: v === 'Month' ? '#fff' : 'rgba(61,46,34,0.55)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'italic', fontSize: '16px', letterSpacing: '0.03em' }}>{v}</button>;
             })}
           </div>
         </div>

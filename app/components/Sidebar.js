@@ -136,7 +136,7 @@ export default function Sidebar() {
       <style jsx>{`
         .topnav-more-wrap .topnav-dropdown {
           display: none; position: absolute;
-          top: calc(100% + 14px); right: -24px;
+          top: calc(100% + 14px); left: 50%; transform: translateX(-50%);
           background: #FFFFFF; border: 1px solid rgba(61,46,34,0.06);
           border-radius: 14px; box-shadow: 0 8px 32px rgba(61,46,34,0.1);
           min-width: 180px; padding: 6px; z-index: 200;
