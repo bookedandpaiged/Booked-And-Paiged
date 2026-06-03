@@ -44,7 +44,7 @@ var text = '#5D4233';        /* body text */
 var textSoft = 'rgba(93,66,51,0.55)'; /* secondary text */
 var textMuted = 'rgba(93,66,51,0.35)'; /* muted, timestamps */
 var accent = '#9C7B65';      /* links, accents */
-var quoteColor = '#C4A98E';  /* quotes, signature, quotation mark */
+var quoteColor = '#8B6E5A';  /* quotes, signature, quotation mark */
 
 var card = {
   background: '#FFFFFF',
@@ -119,7 +119,7 @@ export default function HomePage() {
             {greeting}, Paige &#10022;
           </p>
 
-          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '44px', fontWeight: 400, color: text, lineHeight: 1.18, marginBottom: '32px' }}>
+          <h1 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '36px', fontWeight: 400, color: '#B89B82', lineHeight: 1.18, marginBottom: '32px' }}>
             {affirmation}
           </h1>
 
