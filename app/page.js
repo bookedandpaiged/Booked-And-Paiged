@@ -40,7 +40,7 @@ var sans = "'Satoshi', -apple-system, sans-serif";
 
 /* Color system */
 var brown = '#5D4233';       /* section headers, icons - darker */
-var text = '#7A5F4C';        /* body text - warm mid-brown */
+var text = '#6B5A50';        /* body text - neutral nude brown */
 var textSoft = 'rgba(93,66,51,0.55)'; /* secondary text */
 var textMuted = 'rgba(93,66,51,0.35)'; /* muted, timestamps */
 var accent = '#9C7B65';      /* links, accents */

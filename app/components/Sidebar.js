@@ -53,13 +53,24 @@ export default function Sidebar() {
 
   return (
     <>
-      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '64px', background: 'rgba(246,241,235,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(61,46,34,0.06)', zIndex: 100 }}>
-        <div style={{ maxWidth: '1320px', margin: '0 auto', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 48px' }}>
+      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}>
+        {/* Banner */}
+        <div style={{ background: '#EDE5DA', padding: '12px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(61,46,34,0.06)' }}>
           <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
-            <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '13px', fontWeight: 700, letterSpacing: '0.2em', color: '#3D2E22' }}>BOOKED & PAIGED</span>
+            <div>
+              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', fontWeight: 700, letterSpacing: '0.22em', color: '#3D2E22' }}>BOOKED </span>
+              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', fontWeight: 700, letterSpacing: '0.22em', color: '#9C7B65' }}>&amp; </span>
+              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', fontWeight: 700, letterSpacing: '0.22em', color: '#3D2E22' }}>PAIGED</span>
+              <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '8px', fontWeight: 500, letterSpacing: '0.22em', color: 'rgba(61,46,34,0.4)', marginTop: '2px' }}>YOUR LIFE. INTENTIONALLY MANAGED.</p>
+            </div>
           </Link>
-
-          <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, gap: '36px' }}>
+          <div style={{ width: '38px', height: '38px', borderRadius: '50%', border: '1.5px solid rgba(156,123,101,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '16px', color: '#9C7B65', fontWeight: 500 }}>BP</span>
+          </div>
+        </div>
+        {/* Nav */}
+        <div style={{ background: 'rgba(246,241,235,0.92)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(61,46,34,0.06)' }}>
+          <div style={{ maxWidth: '1320px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px 48px', gap: '36px' }}>
             {NAV_ITEMS.map(function(item) {
               var active = isActive(item.href);
               return (
@@ -93,13 +104,12 @@ export default function Sidebar() {
                 })}
               </div>
             </div>
-          </nav>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-            <button style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: 'none', background: 'transparent', color: 'rgba(61,46,34,0.45)', cursor: 'pointer' }} aria-label="Notifications">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-            </button>
-            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#9C7B65', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 600 }}>P</div>
+            <div style={{ position: 'absolute', right: '48px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: 'none', background: 'transparent', color: 'rgba(61,46,34,0.45)', cursor: 'pointer' }} aria-label="Notifications">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+              </button>
+              <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#9C7B65', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 600 }}>P</div>
+            </div>
           </div>
         </div>
       </header>
