@@ -71,6 +71,33 @@ export default function RemindersPage() {
     updateReminders(function(rs) { return rs.map(function(r) { return r.id === id ? Object.assign({}, r, { lastDone: new Date().toISOString() }) : r; }); });
   }
 
+  function undoMarkDone(id) {
+    updateReminders(function(rs) { return rs.map(function(r) { return r.id === id ? Object.assign({}, r, { lastDone: null }) : r; }); });
+  }
+
+  function getFreqDays(freq) {
+    if (freq.indexOf('2 weeks') !== -1) return 14;
+    if (freq.indexOf('6 weeks') !== -1) return 42;
+    if (freq.indexOf('6 months') !== -1) return 180;
+    if (freq.indexOf('Monthly') !== -1) return 30;
+    if (freq.indexOf('Weekly') !== -1) return 7;
+    if (freq.indexOf('Annual') !== -1 || freq.indexOf('Yearly') !== -1) return 365;
+    return 30;
+  }
+
+  function formatShortDate(d) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate();
+  }
+
+  function getDueText(r) {
+    if (!r.lastDone) return 'Not yet booked — mark done after your next appointment';
+    var last = new Date(r.lastDone);
+    var days = getFreqDays(r.freq);
+    var next = new Date(last.getTime() + days * 86400000);
+    return 'Last booked ' + formatShortDate(last) + ' — book by ' + formatShortDate(next);
+  }
+
   function toggleBillPaid(id) {
     updateBills(function(bs) { return bs.map(function(b) { return b.id === id ? Object.assign({}, b, { paid: !b.paid }) : b; }); });
   }
@@ -118,7 +145,7 @@ export default function RemindersPage() {
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           Reminders
         </h1>
-        <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '16px', letterSpacing: '0.03em' }}>Bills, grooming, pet care, car maintenance, cleaning, and to-dos</p>
+        <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '16px', letterSpacing: '0.03em' }}>Stay on top of the things that keep life running smoothly</p>
       </div>
 
       {/* Tabs */}
@@ -137,17 +164,18 @@ export default function RemindersPage() {
           <div key={cat}>
             <span style={sectionLabel}>{cat}</span>
             {items.map(function(r) {
-              var ago = daysAgo(r.lastDone);
               return (
                 <div key={r.id} style={{ ...card, display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
                   <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: color, flexShrink: 0, marginTop: '4px' }} />
                   <div style={{ flex: 1 }}>
                     <p style={{ fontSize: '14px', fontWeight: 600, color: brown, fontFamily: sans }}>{r.label}</p>
                     <p style={{ fontSize: '12px', color: textSoft, marginTop: '2px', fontFamily: sans }}>{r.freq}</p>
-                    <p style={{ fontSize: '12px', color: textMuted, marginTop: '2px', fontStyle: 'italic', fontFamily: sans }}>{r.note}</p>
-                    {ago !== null && <p style={{ fontSize: '11px', color: accent, marginTop: '4px', fontWeight: 500, fontFamily: sans }}>Last done: {ago === 0 ? 'today' : ago + ' days ago'}</p>}
+                    <p style={{ fontSize: '12px', color: r.lastDone ? accent : textMuted, marginTop: '4px', fontStyle: 'italic', fontFamily: sans, fontWeight: r.lastDone ? 500 : 400 }}>{getDueText(r)}</p>
                   </div>
-                  <button onClick={function(){markDone(r.id);}} style={{ padding: '6px 14px', borderRadius: '20px', border: '1px solid rgba(93,66,51,0.12)', background: 'transparent', color: textSoft, fontSize: '11px', fontWeight: 600, cursor: 'pointer', fontFamily: sans, whiteSpace: 'nowrap', flexShrink: 0 }}>Mark Done</button>
+                  {r.lastDone
+                    ? <button onClick={function(){undoMarkDone(r.id);}} style={{ padding: '6px 14px', borderRadius: '20px', border: '1px solid rgba(42,143,101,0.2)', background: '#e8f5f0', color: '#2a8f65', fontSize: '11px', fontWeight: 600, cursor: 'pointer', fontFamily: sans, whiteSpace: 'nowrap', flexShrink: 0 }}>Done ✓ Undo</button>
+                    : <button onClick={function(){markDone(r.id);}} style={{ padding: '6px 14px', borderRadius: '20px', border: '1px solid rgba(93,66,51,0.12)', background: 'transparent', color: textSoft, fontSize: '11px', fontWeight: 600, cursor: 'pointer', fontFamily: sans, whiteSpace: 'nowrap', flexShrink: 0 }}>Mark Done</button>
+                  }
                 </div>
               );
             })}
