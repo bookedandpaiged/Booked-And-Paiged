@@ -45,6 +45,9 @@ export default function Sidebar() {
   var mobileMoreState = useState(false);
   var mobileMoreOpen = mobileMoreState[0];
   var setMobileMoreOpen = mobileMoreState[1];
+  var desktopMoreState = useState(false);
+  var desktopMore = desktopMoreState[0];
+  var setDesktopMore = desktopMoreState[1];
 
   function isActive(href) {
     if (href === '/') return pathname === '/';
@@ -58,10 +61,10 @@ export default function Sidebar() {
         <div style={{ background: '#EDE5DA', padding: '12px 48px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(61,46,34,0.06)', position: 'relative' }}>
           <Link href="/" style={{ textDecoration: 'none', textAlign: 'center' }}>
             <div>
-              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', fontWeight: 700, letterSpacing: '0.22em', color: '#8B6E5A' }}>BOOKED </span>
-              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', fontWeight: 700, letterSpacing: '0.22em', color: '#B89B82' }}>&amp; </span>
-              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', fontWeight: 700, letterSpacing: '0.22em', color: '#8B6E5A' }}>PAIGED</span>
-              <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '8px', fontWeight: 500, letterSpacing: '0.22em', color: 'rgba(61,46,34,0.35)', marginTop: '2px' }}>YOUR LIFE. INTENTIONALLY MANAGED.</p>
+              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '18px', fontWeight: 700, letterSpacing: '0.22em', color: '#8B6E5A' }}>BOOKED </span>
+              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '18px', fontWeight: 700, letterSpacing: '0.22em', color: '#B89B82' }}>&amp; </span>
+              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '18px', fontWeight: 700, letterSpacing: '0.22em', color: '#8B6E5A' }}>PAIGED</span>
+              <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '10px', fontWeight: 500, letterSpacing: '0.22em', color: 'rgba(61,46,34,0.35)', marginTop: '3px' }}>YOUR LIFE. INTENTIONALLY MANAGED.</p>
             </div>
           </Link>
           <div style={{ position: 'absolute', right: '48px', width: '38px', height: '38px', borderRadius: '50%', border: '1.5px solid rgba(156,123,101,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -71,10 +74,10 @@ export default function Sidebar() {
         {/* Nav */}
         <div style={{ background: 'rgba(246,241,235,0.92)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(61,46,34,0.06)' }}>
           <div style={{ maxWidth: '1320px', margin: '0 auto', display: 'flex', alignItems: 'center', padding: '10px 48px', position: 'relative' }}>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '15px', color: 'rgba(61,46,34,0.5)', flexShrink: 0, marginRight: '32px' }}>
-              {(function() { var h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'; })()}, Paige <span style={{ fontSize: '12px' }}>&#9825;</span>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '17px', color: 'rgba(61,46,34,0.5)', flexShrink: 0, marginRight: '32px' }}>
+              {(function() { var h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'; })()}, Paige <span style={{ fontSize: '13px' }}>&#9825;</span>
             </p>
-            <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, gap: '44px' }}>
+            <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, gap: '52px' }}>
             {NAV_ITEMS.map(function(item) {
               var active = isActive(item.href);
               return (
@@ -89,31 +92,45 @@ export default function Sidebar() {
                 }}>{item.label}</Link>
               );
             })}
-            <div style={{ position: 'relative' }} className="topnav-more-wrap">
+            <div style={{ position: 'relative' }}
+              onMouseEnter={function(){clearTimeout(window._moreTimer);setDesktopMore(true);}}
+              onMouseLeave={function(){window._moreTimer=setTimeout(function(){setDesktopMore(false);},400);}}
+            >
               <button style={{
-                padding: '8px 2px', fontSize: '13px', fontWeight: 400,
-                color: 'rgba(61,46,34,0.5)', background: 'none', border: 'none',
+                padding: '8px 2px', fontSize: '13px', fontWeight: desktopMore ? 600 : 400,
+                color: desktopMore ? '#8B6E5A' : 'rgba(61,46,34,0.5)', background: 'none', border: 'none',
                 fontFamily: "'Satoshi', sans-serif", cursor: 'pointer',
               }}>More</button>
-              <div className="topnav-dropdown">
-                {MORE_ITEMS.map(function(item) {
-                  return (
-                    <Link key={item.href} href={item.href} style={{
-                      display: 'block', padding: '10px 16px',
-                      fontSize: '12px', fontWeight: 400, color: 'rgba(61,46,34,0.55)',
-                      borderRadius: '8px', textDecoration: 'none',
-                      fontFamily: "'Satoshi', sans-serif",
-                    }}>{item.label}</Link>
-                  );
-                })}
-              </div>
+              {desktopMore && (
+                <div style={{
+                  position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)',
+                  paddingTop: '6px', zIndex: 200,
+                }}>
+                  <div style={{
+                    background: '#FFFFFF', border: '1px solid rgba(61,46,34,0.06)',
+                    borderRadius: '14px', boxShadow: '0 8px 32px rgba(61,46,34,0.1)',
+                    minWidth: '180px', padding: '6px',
+                  }}>
+                    {MORE_ITEMS.map(function(item) {
+                      return (
+                        <Link key={item.href} href={item.href} onClick={function(){setDesktopMore(false);}} style={{
+                          display: 'block', padding: '10px 16px',
+                          fontSize: '12px', fontWeight: 400, color: 'rgba(61,46,34,0.55)',
+                          borderRadius: '8px', textDecoration: 'none',
+                          fontFamily: "'Satoshi', sans-serif",
+                        }}>{item.label}</Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
             </nav>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-              <button style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: 'none', background: 'transparent', color: 'rgba(61,46,34,0.45)', cursor: 'pointer' }} aria-label="Notifications">
+              <Link href="/notifications" style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: 'none', background: 'transparent', color: 'rgba(61,46,34,0.45)', cursor: 'pointer', textDecoration: 'none' }} aria-label="Notifications">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-              </button>
-              <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#9C7B65', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 600 }}>P</div>
+              </Link>
+              <Link href="/settings" style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#9C7B65', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>P</Link>
             </div>
           </div>
         </div>
@@ -149,21 +166,6 @@ export default function Sidebar() {
       )}
 
       <style jsx>{`
-        .topnav-more-wrap .topnav-dropdown {
-          display: none; position: absolute;
-          top: calc(100% + 14px); left: 50%; transform: translateX(-50%);
-          background: #FFFFFF; border: 1px solid rgba(61,46,34,0.06);
-          border-radius: 14px; box-shadow: 0 8px 32px rgba(61,46,34,0.1);
-          min-width: 180px; padding: 6px; z-index: 200;
-        }
-        .topnav-more-wrap:hover .topnav-dropdown { display: block; }
-        .topnav-dropdown-item {
-          display: block; padding: 10px 16px;
-          font-size: 12px; font-weight: 400; color: rgba(61,46,34,0.55);
-          border-radius: 8px; transition: all 0.12s; text-decoration: none;
-          font-family: 'Satoshi', sans-serif;
-        }
-        .topnav-dropdown-item:hover { background: #F6F1EB; color: #3D2E22; }
         .mobile-nav {
           display: none; position: fixed; bottom: 0; left: 0; right: 0;
           height: 76px; background: #FFFFFF;
