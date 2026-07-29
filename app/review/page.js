@@ -9,25 +9,25 @@ var brown = '#5D4233'; var text = '#6B5A50'; var textSoft = 'rgba(93,66,51,0.55)
 var textMuted = 'rgba(93,66,51,0.35)'; var accent = '#9C7B65'; var accentDark = '#6B4F3E';
 var card = { background: '#FFFFFF', border: '1px solid rgba(93,66,51,0.06)', borderRadius: '16px', padding: '22px', marginBottom: '14px', boxShadow: '0 1px 4px rgba(93,66,51,0.02)' };
 var inp = { width: '100%', padding: '10px 14px', border: '1px solid rgba(93,66,51,0.12)', borderRadius: '10px', fontSize: '13px', fontFamily: sans, color: text, background: '#FAF7F3', outline: 'none', marginBottom: '12px', resize: 'vertical' };
-var lbl = { fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: textMuted, display: 'block', marginBottom: '5px', fontFamily: sans };
+var lbl = { fontSize: '12px', fontWeight: 600, letterSpacing: '0.02em', color: brown, display: 'block', marginBottom: '6px', fontFamily: sans };
 
 var WEEKLY_QUESTIONS = [
-  { id: 'done', label: 'What got done this week?', placeholder: 'Key wins, completed tasks, things you actually showed up for...', rows: 3 },
-  { id: 'carried', label: 'What carried over?', placeholder: 'What didn\'t get done, what shifted, what needs to move to next week...', rows: 2 },
-  { id: 'priority', label: 'Top priority for next week', placeholder: 'The one thing that must move forward...', rows: 2 },
-  { id: 'adjustments', label: 'Any schedule adjustments needed?', placeholder: 'Gym, study blocks, work, routines — anything that needs to shift...', rows: 2 },
-  { id: 'win', label: 'One personal win from this week', placeholder: 'Something you\'re proud of, big or small...', rows: 2 },
+  { id: 'done', label: 'What Got Done This Week?', placeholder: 'Key wins, completed tasks, things you actually showed up for...', rows: 3 },
+  { id: 'carried', label: 'What Carried Over?', placeholder: 'What didn\'t get done, what shifted, what needs to move to next week...', rows: 2 },
+  { id: 'priority', label: 'Top Priority for Next Week', placeholder: 'The one thing that must move forward...', rows: 2 },
+  { id: 'adjustments', label: 'Any Schedule Adjustments Needed?', placeholder: 'Gym, study blocks, work, routines — anything that needs to shift...', rows: 2 },
+  { id: 'win', label: 'One Personal Win From This Week', placeholder: 'Something you\'re proud of, big or small...', rows: 2 },
 ];
 
 var QUARTERLY_QUESTIONS = [
-  { id: 'gre', label: 'GRE + MBA progress', placeholder: 'Score movement, milestones hit, study consistency...', rows: 3 },
-  { id: 'awards', label: 'Awards submissions status', placeholder: 'What\'s submitted, what\'s in progress, what\'s pending...', rows: 2 },
-  { id: 'wellness', label: 'Wellness + body composition', placeholder: 'Weight trends, energy, consistency, what\'s working...', rows: 2 },
-  { id: 'professional', label: 'Professional development', placeholder: 'Career milestones, Sachs Media wins, skills built...', rows: 2 },
-  { id: 'working', label: 'What\'s working', placeholder: 'Systems, habits, routines that are actually serving you...', rows: 2 },
-  { id: 'change', label: 'What needs to change', placeholder: 'What to drop, adjust, or rebuild next quarter...', rows: 2 },
-  { id: 'financial', label: 'Financial check-in', placeholder: 'Bills, savings, upcoming expenses, anything to plan for...', rows: 2 },
-  { id: 'personal', label: 'Personal life check-in', placeholder: 'Relationships, self-care, rest, mental health, joy...', rows: 2 },
+  { id: 'gre', label: 'GRE + MBA Progress', placeholder: 'Score movement, milestones hit, study consistency...', rows: 3 },
+  { id: 'awards', label: 'Awards Submissions Status', placeholder: 'What\'s submitted, what\'s in progress, what\'s pending...', rows: 2 },
+  { id: 'wellness', label: 'Wellness + Body Composition', placeholder: 'Weight trends, energy, consistency, what\'s working...', rows: 2 },
+  { id: 'professional', label: 'Professional Development', placeholder: 'Career milestones, Sachs Media wins, skills built...', rows: 2 },
+  { id: 'working', label: 'What\'s Working', placeholder: 'Systems, habits, routines that are actually serving you...', rows: 2 },
+  { id: 'change', label: 'What Needs to Change', placeholder: 'What to drop, adjust, or rebuild next quarter...', rows: 2 },
+  { id: 'financial', label: 'Financial Check-In', placeholder: 'Bills, savings, upcoming expenses, anything to plan for...', rows: 2 },
+  { id: 'personal', label: 'Personal Life Check-In', placeholder: 'Relationships, self-care, rest, mental health, joy...', rows: 2 },
 ];
 
 function ReviewForm({ questions, onSave, saving }) {
@@ -62,7 +62,7 @@ function ReviewEntry({ entry, type }) {
     <div style={{ ...card, marginBottom: '8px' }}>
       <button onClick={function(){setOpen(!open);}} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
         <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '16px', color: brown }}>{dateStr}</p>
-        <span style={{ fontSize: '11px', color: textMuted, transform: open ? 'rotate(180deg)' : 'none', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
+        <span style={{ fontSize: '11px', color: textMuted, transform: open ? 'rotate(180deg)' : 'none', display: 'inline-block', transition: 'transform 0.2s' }}>&#9660;</span>
       </button>
       {open && (
         <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(93,66,51,0.06)' }}>
@@ -70,7 +70,7 @@ function ReviewEntry({ entry, type }) {
             if (!entry[q.id]) return null;
             return (
               <div key={q.id} style={{ marginBottom: '14px' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: textMuted, marginBottom: '4px', fontFamily: sans }}>{q.label}</p>
+                <p style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.02em', color: brown, marginBottom: '4px', fontFamily: sans }}>{q.label}</p>
                 <p style={{ fontSize: '14px', color: text, lineHeight: 1.6, fontFamily: sans }}>{entry[q.id]}</p>
               </div>
             );
@@ -114,7 +114,10 @@ export default function ReviewPage() {
 
   var now = new Date();
   var weekOf = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-  var quarter = 'Q' + (Math.ceil((now.getMonth() + 1) / 3)) + ' ' + now.getFullYear();
+  var qNum = Math.ceil((now.getMonth() + 1) / 3);
+  var quarter = 'Q' + qNum + ' ' + now.getFullYear();
+  var qDates = [['January 1','March 31'],['April 1','June 30'],['July 1','September 30'],['October 1','December 31']][qNum - 1];
+  var quarterFull = quarter + ' \u00B7 ' + qDates[0] + ' \u2013 ' + qDates[1];
 
   return (
     <div>
@@ -157,7 +160,7 @@ export default function ReviewPage() {
         <div>
           <div style={{ ...card, borderLeft: '3px solid ' + accent, marginBottom: '20px' }}>
             <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '20px', color: brown, marginBottom: '4px' }}>Quarterly Review</p>
-            <p style={{ fontSize: '13px', color: textSoft, fontFamily: sans }}>{quarter} · Deeper reflection across all areas</p>
+            <p style={{ fontSize: '13px', color: textSoft, fontFamily: sans }}>{quarterFull} &middot; Deeper reflection across all areas</p>
           </div>
           <ReviewForm questions={QUARTERLY_QUESTIONS} onSave={saveQuarterly} saving={saving} />
         </div>

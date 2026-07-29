@@ -29,7 +29,6 @@
   --cat-wellness: #7A9E7E;
   --cat-gre: #7B8EB8;
   --cat-awards: #C4A03A;
-  --cat-sachs: #5E9BAD;
   --cat-icartswag: #C27A5E;
   --cat-volunteer: #8AAE6A;
   --cat-selfcare: #C48BA0;
@@ -80,7 +79,7 @@ input, select, textarea, button { font-family: var(--font-body); }
 a { color: var(--accent-dark); text-decoration: none; }
 a:hover { color: var(--accent); }
 
-/* ── App Layout ── */
+/* App Layout */
 .app-layout {
   min-height: 100vh;
   display: flex;
@@ -102,7 +101,7 @@ a:hover { color: var(--accent); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Card System ── */
+/* Card System */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -145,7 +144,7 @@ a:hover { color: var(--accent); }
 
 .card-action:hover { color: var(--accent-dark); }
 
-/* ── Section Label ── */
+/* Section Label */
 .section-label {
   font-family: var(--font-body);
   font-size: 11px;
@@ -156,7 +155,7 @@ a:hover { color: var(--accent); }
   margin-bottom: 20px;
 }
 
-/* ── Module Pages ── */
+/* Module Pages */
 .module-header {
   margin-bottom: 28px;
 }
@@ -208,7 +207,7 @@ a:hover { color: var(--accent); }
   line-height: 1.65;
 }
 
-/* ── Buttons ── */
+/* Buttons */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -237,7 +236,7 @@ a:hover { color: var(--accent); }
   transform: translateY(0);
 }
 
-/* ── Responsive ── */
+/* Responsive */
 @media (max-width: 768px) {
   .main-content {
     padding: 20px;

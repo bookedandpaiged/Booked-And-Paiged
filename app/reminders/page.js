@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useData } from '../components/DataProvider';
 
 var serif = "'Cormorant Garamond', Georgia, serif";
@@ -61,6 +61,19 @@ export default function RemindersPage() {
   var bills = (data && data.bills) || DEFAULT_BILLS;
   var cleaning = (data && data.cleaning) || DEFAULT_CLEANING;
   var todos = (data && data.todos) || [];
+
+  // Auto-reset cleaning tasks each Monday
+  useEffect(function() {
+    if (!data) return;
+    var now = new Date();
+    var weekNum = Math.floor((now - new Date(now.getFullYear(), 0, 1)) / 604800000);
+    if (data.cleaningResetWeek !== weekNum) {
+      updateData(function(p) {
+        var reset = (p && p.cleaning || DEFAULT_CLEANING).map(function(c) { return Object.assign({}, c, { done: false }); });
+        return Object.assign({}, p, { cleaning: reset, cleaningResetWeek: weekNum });
+      });
+    }
+  }, [data && data.cleaningResetWeek]);
 
   function updateReminders(fn) { updateData(function(p) { return Object.assign({}, p, { reminders: fn(p && p.reminders || DEFAULT_REMINDERS) }); }); }
   function updateBills(fn) { updateData(function(p) { return Object.assign({}, p, { bills: fn(p && p.bills || DEFAULT_BILLS) }); }); }

@@ -17,7 +17,7 @@ var C = {
 
 var CAT_COLORS = {
   "Physical Wellness": "#5a9870", "GRE / Grad School": "#5b7ec4",
-  "Awards": "#c4903a", "Sachs Media": "#3a8fa8",
+  "Awards": "#c4903a", "Work": "#3a8fa8",
   "ICartSwag": "#c4604a", "Volunteer": "#6e9e50",
   "Self Care": "#b86880", "Medical": "#8060b8",
 };
@@ -50,19 +50,6 @@ var DEFAULTS = [
   {id:'d16',title:"ICartSwag: Content + Strategy",startDate:"2026-01-06",startTime:"19:00",endTime:"20:00",category:"ICartSwag",notes:"Social content, brand strategy. Tuesdays.",recurrence:{type:'weekly',days:[2],until:null}},
   {id:'d17',title:"GRE Study Block",startDate:"2026-01-05",startTime:"20:00",endTime:"21:30",category:"GRE / Grad School",notes:"Verbal + Quant prep. Target: 160+ per section.",recurrence:{type:'weekly',days:[1,3,5],until:null}},
   {id:'d19',title:"Awards Work Block",startDate:"2026-05-18",startTime:"19:00",endTime:"20:30",category:"Awards",notes:"Weekly Mondays.",recurrence:{type:'weekly',days:[1],until:null}},
-  {id:'sm01',title:"HCA Social Posts",startDate:"2026-01-05",startTime:"09:00",endTime:"10:30",category:"Sachs Media",notes:"Weekly Monday task block.",recurrence:{type:'weekly',days:[1],until:null}},
-  {id:'sm02',title:"Team Health TB",startDate:"2026-01-05",startTime:"10:30",endTime:"11:00",category:"Sachs Media",notes:"Weekly Monday internal check-in.",recurrence:{type:'weekly',days:[1],until:null}},
-  {id:'sm03',title:"HCA/SM Weekly Check-In",startDate:"2026-01-05",startTime:"13:00",endTime:"14:00",category:"Sachs Media",notes:"Weekly Monday HCA client check-in.",recurrence:{type:'weekly',days:[1],until:null}},
-  {id:'sm04',title:"Finalize HCA Intelligence Report",startDate:"2026-01-05",startTime:"15:00",endTime:"17:00",category:"Sachs Media",notes:"Weekly Monday delivery.",recurrence:{type:'weekly',days:[1],until:null}},
-  {id:'sm05',title:"Start New HCA Clips",startDate:"2026-01-06",startTime:"09:00",endTime:"10:00",category:"Sachs Media",notes:"Weekly Tuesday.",recurrence:{type:'weekly',days:[2],until:null}},
-  {id:'sm06',title:"SachsHEALTH Team Call",startDate:"2026-01-06",startTime:"10:30",endTime:"11:00",category:"Sachs Media",notes:"Weekly Tuesday. Zoom.",recurrence:{type:'weekly',days:[2],until:null}},
-  {id:'sm08',title:"Paige / Torri Check-In",startDate:"2026-01-06",startTime:"11:30",endTime:"12:30",category:"Sachs Media",notes:"Weekly Tuesday 1:1.",recurrence:{type:'weekly',days:[2],until:null}},
-  {id:'sm11',title:"Clips Research - HCA",startDate:"2026-01-06",startTime:"14:30",endTime:"16:00",category:"Sachs Media",notes:"Daily clips research.",recurrence:{type:'weekly',days:[2,3,4,5],until:null}},
-  {id:'sm13',title:"Send HCA Intelligence Report",startDate:"2026-01-06",startTime:"16:00",endTime:"17:00",category:"Sachs Media",notes:"Weekly Tuesday delivery.",recurrence:{type:'weekly',days:[2],until:null}},
-  {id:'sm15',title:"HCA Team Chat",startDate:"2026-01-07",startTime:"13:00",endTime:"13:30",category:"Sachs Media",notes:"Wednesday internal check-in.",recurrence:{type:'weekly',days:[3],until:null}},
-  {id:'sm16',title:"HCA/SM Weekly Check-In 2",startDate:"2026-01-07",startTime:"13:30",endTime:"14:00",category:"Sachs Media",notes:"Wednesday HCA client check-in.",recurrence:{type:'weekly',days:[3],until:null}},
-  {id:'sm18',title:"Staff Meeting",startDate:"2026-01-08",startTime:"08:30",endTime:"09:30",category:"Sachs Media",notes:"Weekly Thursday all-hands.",recurrence:{type:'weekly',days:[4],until:null}},
-  {id:'sm19',title:"HCA Team Chat Thu",startDate:"2026-01-08",startTime:"10:30",endTime:"11:00",category:"Sachs Media",notes:"Thursday HCA team check-in.",recurrence:{type:'weekly',days:[4],until:null}},
 ];
 
 function EventModal(props) {
@@ -202,35 +189,11 @@ export default function CalendarPage() {
 
   var headerTitle = view === 'month' ? MONTHS[m] + ' ' + y : view === 'week' ? MONTHS[weekDays[0].getMonth()] + ' ' + weekDays[0].getDate() + ' - ' + weekDays[6].getDate() + ', ' + y : DAYS_F[currentDate.getDay()] + ', ' + MONTHS[m] + ' ' + currentDate.getDate();
 
-  function openAdd(dateStr) {
-    setForm({ title: '', startDate: dateStr || TODAY, startTime: '', endTime: '', category: 'Self Care', notes: '', recurrenceType: 'none', recurrenceDays: [] });
-    setSelectedEvent(null);
-    setShowModal(true);
-  }
-
-  function openEdit(ev) {
-    setForm({ title: ev.title, startDate: ev.startDate, startTime: ev.startTime || '', endTime: ev.endTime || '', category: ev.category, notes: ev.notes || '', recurrenceType: ev.recurrence ? ev.recurrence.type : 'none', recurrenceDays: ev.recurrence ? (ev.recurrence.days || []) : [] });
-    setSelectedEvent(ev);
-    setShowModal(true);
-  }
-
-  function saveEvent() {
-    if (!form.title || !form.startDate) return;
-    var rec = form.recurrenceType === 'none' ? null : { type: form.recurrenceType, days: form.recurrenceDays.length ? form.recurrenceDays : null, until: null };
-    var ev = { id: selectedEvent ? selectedEvent.id : uid(), title: form.title, startDate: form.startDate, startTime: form.startTime || null, endTime: form.endTime || null, category: form.category, notes: form.notes, recurrence: rec };
-    var newEvents = selectedEvent ? events.map(function(e) { return e.id === selectedEvent.id ? ev : e; }) : events.concat([ev]);
-    saveEvents(newEvents);
-    setShowModal(false);
-  }
-
-  function deleteEvent() {
-    if (selectedEvent) saveEvents(events.filter(function(e) { return e.id !== selectedEvent.id; }));
-    setShowModal(false);
-  }
-
-  function toggleCat(c) {
-    setActiveCategories(function(prev) { return prev.includes(c) ? prev.filter(function(x) { return x !== c; }) : prev.concat([c]); });
-  }
+  function openAdd(dateStr) { setForm({ title: '', startDate: dateStr || TODAY, startTime: '', endTime: '', category: 'Self Care', notes: '', recurrenceType: 'none', recurrenceDays: [] }); setSelectedEvent(null); setShowModal(true); }
+  function openEdit(ev) { setForm({ title: ev.title, startDate: ev.startDate, startTime: ev.startTime || '', endTime: ev.endTime || '', category: ev.category, notes: ev.notes || '', recurrenceType: ev.recurrence ? ev.recurrence.type : 'none', recurrenceDays: ev.recurrence ? (ev.recurrence.days || []) : [] }); setSelectedEvent(ev); setShowModal(true); }
+  function saveEvent() { if (!form.title || !form.startDate) return; var rec = form.recurrenceType === 'none' ? null : { type: form.recurrenceType, days: form.recurrenceDays.length ? form.recurrenceDays : null, until: null }; var ev = { id: selectedEvent ? selectedEvent.id : uid(), title: form.title, startDate: form.startDate, startTime: form.startTime || null, endTime: form.endTime || null, category: form.category, notes: form.notes, recurrence: rec }; var newEvents = selectedEvent ? events.map(function(e) { return e.id === selectedEvent.id ? ev : e; }) : events.concat([ev]); saveEvents(newEvents); setShowModal(false); }
+  function deleteEvent() { if (selectedEvent && confirm('Delete this event? This cannot be undone.')) { saveEvents(events.filter(function(e) { return e.id !== selectedEvent.id; })); } setShowModal(false); }
+  function toggleCat(c) { setActiveCategories(function(prev) { return prev.includes(c) ? prev.filter(function(x) { return x !== c; }) : prev.concat([c]); }); }
 
   if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}><p style={{ color: C.textSoft, fontFamily: serif, fontStyle: 'italic', fontSize: '18px' }}>Loading planner...</p></div>;
 
@@ -243,37 +206,21 @@ export default function CalendarPage() {
         </h1>
         <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '16px', letterSpacing: '0.03em' }}>Your unified calendar across all modules</p>
       </div>
-
-      {/* Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button onClick={function(){nav(-1);}} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid ' + C.border, background: 'transparent', color: C.textSoft, cursor: 'pointer', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: sans }}>&#8249;</button>
-          <button onClick={function(){nav(1);}} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid ' + C.border, background: 'transparent', color: C.textSoft, cursor: 'pointer', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: sans }}>&#8250;</button>
+          <button onClick={function(){nav(-1);}} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid ' + C.border, background: 'transparent', color: C.textSoft, cursor: 'pointer', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: sans }}>{'\u2039'}</button>
+          <button onClick={function(){nav(1);}} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid ' + C.border, background: 'transparent', color: C.textSoft, cursor: 'pointer', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: sans }}>{'\u203a'}</button>
           <h2 style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '24px', color: C.text, minWidth: '200px' }}>{headerTitle}</h2>
         </div>
         <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-          {['month', 'week', 'today'].map(function(v) {
-            var label = v === 'today' ? 'Day' : v.charAt(0).toUpperCase() + v.slice(1);
-            return <button key={v} onClick={function(){setView(v);}} style={{ padding: '7px 18px', borderRadius: '50px', border: view === v ? 'none' : '1px solid ' + C.border, background: view === v ? C.accentDark : 'transparent', color: view === v ? '#fff' : C.textSoft, fontSize: '12px', fontWeight: 500, cursor: 'pointer', fontFamily: sans }}>{label}</button>;
-          })}
+          {['month', 'week', 'today'].map(function(v) { var label = v === 'today' ? 'Day' : v.charAt(0).toUpperCase() + v.slice(1); return <button key={v} onClick={function(){setView(v);}} style={{ padding: '7px 18px', borderRadius: '50px', border: view === v ? 'none' : '1px solid ' + C.border, background: view === v ? C.accentDark : 'transparent', color: view === v ? '#fff' : C.textSoft, fontSize: '12px', fontWeight: 500, cursor: 'pointer', fontFamily: sans }}>{label}</button>; })}
           <button onClick={function(){setCurrentDate(new Date());setView('today');}} style={{ padding: '7px 18px', borderRadius: '50px', border: '1px solid ' + C.border, background: 'transparent', color: C.textSoft, fontSize: '12px', cursor: 'pointer', fontFamily: sans, marginLeft: '4px' }}>Today</button>
           <button onClick={function(){openAdd();}} style={{ padding: '7px 18px', borderRadius: '50px', border: 'none', background: C.accentDark, color: '#fff', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: sans, marginLeft: '4px' }}>+ New Event</button>
         </div>
       </div>
-
-      {/* Category filters */}
       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '18px' }}>
-        {CATEGORIES.map(function(cat) {
-          var active = activeCategories.includes(cat);
-          var color = cc(cat);
-          return <button key={cat} onClick={function(){toggleCat(cat);}} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '5px 12px', borderRadius: '20px', border: '1px solid ' + (active ? color + '40' : C.border), background: active ? color + '10' : 'transparent', cursor: 'pointer', fontFamily: sans, fontSize: '11px', color: active ? C.text : C.textMuted, fontWeight: active ? 500 : 400 }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: active ? color : C.textMuted }} />
-            {cat}
-          </button>;
-        })}
+        {CATEGORIES.map(function(cat) { var active = activeCategories.includes(cat); var color = cc(cat); return <button key={cat} onClick={function(){toggleCat(cat);}} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '5px 12px', borderRadius: '20px', border: '1px solid ' + (active ? color + '40' : C.border), background: active ? color + '10' : 'transparent', cursor: 'pointer', fontFamily: sans, fontSize: '11px', color: active ? C.text : C.textMuted, fontWeight: active ? 500 : 400 }}><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: active ? color : C.textMuted }} />{cat}</button>; })}
       </div>
-
-      {/* Calendar body */}
       <div style={{ background: C.surface, border: '1px solid ' + C.border, borderRadius: '16px', boxShadow: '0 1px 4px rgba(93,66,51,0.03)', overflow: 'hidden', display: 'flex' }}>
         <div style={{ flex: 1 }}>
           {view === 'month' && (
@@ -283,37 +230,16 @@ export default function CalendarPage() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: '2px' }}>
                 {monthDays.map(function(item, idx) {
-                  var ds = fmtDate(item.date);
-                  var evs = sortEvs(getFiltered(ds));
-                  var isToday = ds === TODAY;
-                  var visible = evs.slice(0, 2);
-                  var overflow = evs.length - visible.length;
+                  var ds = fmtDate(item.date); var evs = sortEvs(getFiltered(ds)); var isToday = ds === TODAY; var visible = evs.slice(0, 2); var overflow = evs.length - visible.length;
                   return (
-                    <div key={idx} onClick={function(){setDayPanel(ds);}} style={{
-                      background: isToday ? C.accentLight : C.surface,
-                      border: '1px solid ' + (isToday ? C.borderHover : C.border),
-                      borderRadius: '8px', padding: '6px 5px 5px',
-                      opacity: item.current ? 1 : 0.25, cursor: 'pointer',
-                      minHeight: '80px', display: 'flex', flexDirection: 'column',
-                    }}>
+                    <div key={idx} onClick={function(){setDayPanel(ds);}} style={{ background: isToday ? C.accentLight : C.surface, border: '1px solid ' + (isToday ? C.borderHover : C.border), borderRadius: '8px', padding: '6px 5px 5px', opacity: item.current ? 1 : 0.25, cursor: 'pointer', minHeight: '80px', display: 'flex', flexDirection: 'column' }}>
                       <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', borderRadius: '50%', marginBottom: '4px', background: isToday ? C.accentDark : 'transparent', color: isToday ? '#fff' : C.text, fontSize: '12px', fontWeight: isToday ? 600 : 400, fontFamily: sans }}>{item.date.getDate()}</div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        {visible.map(function(ev) {
-                          return (
-                            <div key={ev.id} onClick={function(e){e.stopPropagation();openEdit(ev);}} style={{
-                              display: 'flex', alignItems: 'center', gap: '4px',
-                              padding: '2px 4px', borderRadius: '4px',
-                              background: cc(ev.category) + '14',
-                              borderLeft: '2px solid ' + cc(ev.category),
-                              cursor: 'pointer', overflow: 'hidden',
-                            }}>
-                              <span style={{ fontSize: '10px', color: C.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: 1.3, fontFamily: sans }}>
-                                {ev.startTime && <span style={{ color: cc(ev.category), fontWeight: 500, marginRight: '3px' }}>{fmtTime(ev.startTime)}</span>}
-                                {ev.title}
-                              </span>
-                            </div>
-                          );
-                        })}
+                        {visible.map(function(ev) { return (
+                          <div key={ev.id} onClick={function(e){e.stopPropagation();openEdit(ev);}} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 4px', borderRadius: '4px', background: cc(ev.category) + '14', borderLeft: '2px solid ' + cc(ev.category), cursor: 'pointer', overflow: 'hidden' }}>
+                            <span style={{ fontSize: '10px', color: C.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: 1.3, fontFamily: sans }}>{ev.startTime && <span style={{ color: cc(ev.category), fontWeight: 500, marginRight: '3px' }}>{fmtTime(ev.startTime)}</span>}{ev.title}</span>
+                          </div>
+                        ); })}
                         {overflow > 0 && <div style={{ fontSize: '10px', color: C.textMuted, padding: '1px 4px', fontFamily: sans }}>+{overflow} more</div>}
                       </div>
                     </div>
@@ -322,14 +248,10 @@ export default function CalendarPage() {
               </div>
             </div>
           )}
-
           {view === 'week' && (
             <div style={{ padding: '20px 24px', overflowX: 'auto' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(130px,1fr))', gap: '6px', minWidth: '910px' }}>
-                {weekDays.map(function(d) {
-                  var ds = fmtDate(d);
-                  var evs = sortEvs(getFiltered(ds));
-                  var isToday = ds === TODAY;
+                {weekDays.map(function(d) { var ds = fmtDate(d); var evs = sortEvs(getFiltered(ds)); var isToday = ds === TODAY;
                   return (
                     <div key={ds} style={{ background: C.surface, borderRadius: '10px', border: '1px solid ' + (isToday ? C.borderHover : C.border), overflow: 'hidden' }}>
                       <div style={{ padding: '9px 8px', textAlign: 'center', borderBottom: '1px solid ' + C.border, background: isToday ? C.accentLight : 'transparent' }}>
@@ -337,14 +259,12 @@ export default function CalendarPage() {
                         <div style={{ width: '27px', height: '27px', borderRadius: '50%', background: isToday ? C.accentDark : 'transparent', color: isToday ? '#fff' : C.text, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: isToday ? 600 : 400, margin: '3px auto 0', fontFamily: sans }}>{d.getDate()}</div>
                       </div>
                       <div style={{ padding: '6px', display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                        {evs.map(function(ev) {
-                          return (
-                            <div key={ev.id} onClick={function(){openEdit(ev);}} style={{ padding: '4px 6px', borderRadius: '4px', borderLeft: '2px solid ' + cc(ev.category), background: cc(ev.category) + '12', cursor: 'pointer' }}>
-                              {ev.startTime && <p style={{ fontSize: '9px', color: cc(ev.category), fontWeight: 500, lineHeight: 1.2, marginBottom: '1px', fontFamily: sans }}>{fmtTime(ev.startTime)}</p>}
-                              <p style={{ fontSize: '11px', color: C.text, lineHeight: 1.25, fontFamily: sans }}>{ev.title}</p>
-                            </div>
-                          );
-                        })}
+                        {evs.map(function(ev) { return (
+                          <div key={ev.id} onClick={function(){openEdit(ev);}} style={{ padding: '4px 6px', borderRadius: '4px', borderLeft: '2px solid ' + cc(ev.category), background: cc(ev.category) + '12', cursor: 'pointer' }}>
+                            {ev.startTime && <p style={{ fontSize: '9px', color: cc(ev.category), fontWeight: 500, lineHeight: 1.2, marginBottom: '1px', fontFamily: sans }}>{fmtTime(ev.startTime)}</p>}
+                            <p style={{ fontSize: '11px', color: C.text, lineHeight: 1.25, fontFamily: sans }}>{ev.title}</p>
+                          </div>
+                        ); })}
                         {evs.length === 0 && <p style={{ fontSize: '11px', color: C.textMuted, textAlign: 'center', padding: '10px 0' }}>-</p>}
                         <button onClick={function(){openAdd(ds);}} style={{ width: '100%', marginTop: '4px', padding: '4px', borderRadius: '4px', border: '1px dashed ' + C.border, background: 'transparent', color: C.textMuted, cursor: 'pointer', fontSize: '10px', fontFamily: sans }}>+ Add</button>
                       </div>
@@ -354,11 +274,7 @@ export default function CalendarPage() {
               </div>
             </div>
           )}
-
-          {view === 'today' && (function() {
-            var ds = fmtDate(currentDate);
-            var evs = sortEvs(getFiltered(ds));
-            var d = currentDate;
+          {view === 'today' && (function() { var ds = fmtDate(currentDate); var evs = sortEvs(getFiltered(ds)); var d = currentDate;
             return (
               <div style={{ padding: '32px 28px', maxWidth: '620px', margin: '0 auto' }}>
                 <div style={{ marginBottom: '28px' }}>
@@ -369,58 +285,48 @@ export default function CalendarPage() {
                   </div>
                 </div>
                 <button onClick={function(){openAdd(ds);}} style={{ marginBottom: '20px', padding: '9px 18px', borderRadius: '50px', border: '1px solid ' + C.border, background: 'transparent', color: C.textSoft, cursor: 'pointer', fontSize: '12px', fontFamily: sans }}>+ Add event</button>
-                {evs.length === 0
-                  ? <p style={{ color: C.textMuted, fontSize: '14px', fontFamily: sans }}>Nothing scheduled for this day.</p>
+                {evs.length === 0 ? <p style={{ color: C.textMuted, fontSize: '14px', fontFamily: sans }}>Nothing scheduled for this day.</p>
                   : <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {evs.map(function(ev) {
-                        return (
-                          <div key={ev.id} onClick={function(){openEdit(ev);}} style={{ display: 'flex', gap: '14px', padding: '14px 16px', borderRadius: '12px', background: C.surface, border: '1px solid ' + C.border, cursor: 'pointer' }}>
-                            <div style={{ width: '3px', borderRadius: '2px', flexShrink: 0, background: cc(ev.category), alignSelf: 'stretch', minHeight: '44px' }} />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
-                                <p style={{ fontSize: '14px', fontWeight: 500, color: C.text, fontFamily: sans }}>{ev.title}</p>
-                                {ev.startTime && <span style={{ fontSize: '11px', color: cc(ev.category), flexShrink: 0, fontWeight: 500, fontFamily: sans }}>{fmtTime(ev.startTime)}{ev.endTime ? ' - ' + fmtTime(ev.endTime) : ''}</span>}
-                              </div>
-                              <p style={{ fontSize: '10px', color: cc(ev.category), marginTop: '3px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 600, fontFamily: sans }}>{ev.category}</p>
-                              {ev.notes && <p style={{ fontSize: '12px', color: C.textSoft, marginTop: '6px', lineHeight: 1.5, fontFamily: sans }}>{ev.notes.length > 120 ? ev.notes.slice(0, 120) + '...' : ev.notes}</p>}
+                      {evs.map(function(ev) { return (
+                        <div key={ev.id} onClick={function(){openEdit(ev);}} style={{ display: 'flex', gap: '14px', padding: '14px 16px', borderRadius: '12px', background: C.surface, border: '1px solid ' + C.border, cursor: 'pointer' }}>
+                          <div style={{ width: '3px', borderRadius: '2px', flexShrink: 0, background: cc(ev.category), alignSelf: 'stretch', minHeight: '44px' }} />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                              <p style={{ fontSize: '14px', fontWeight: 500, color: C.text, fontFamily: sans }}>{ev.title}</p>
+                              {ev.startTime && <span style={{ fontSize: '11px', color: cc(ev.category), flexShrink: 0, fontWeight: 500, fontFamily: sans }}>{fmtTime(ev.startTime)}{ev.endTime ? ' - ' + fmtTime(ev.endTime) : ''}</span>}
                             </div>
+                            <p style={{ fontSize: '10px', color: cc(ev.category), marginTop: '3px', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 600, fontFamily: sans }}>{ev.category}</p>
+                            {ev.notes && <p style={{ fontSize: '12px', color: C.textSoft, marginTop: '6px', lineHeight: 1.5, fontFamily: sans }}>{ev.notes.length > 120 ? ev.notes.slice(0, 120) + '...' : ev.notes}</p>}
                           </div>
-                        );
-                      })}
+                        </div>
+                      ); })}
                     </div>
                 }
               </div>
             );
           })()}
         </div>
-
-        {/* Day panel */}
-        {dayPanel && (function() {
-          var d = parseDate(dayPanel);
-          var evs = sortEvs(getFiltered(dayPanel));
+        {dayPanel && (function() { var d = parseDate(dayPanel); var evs = sortEvs(getFiltered(dayPanel));
           return (
             <div style={{ width: '290px', minWidth: '290px', background: C.surface, borderLeft: '1px solid ' + C.border, display: 'flex', flexDirection: 'column', maxHeight: '80vh', overflowY: 'auto' }}>
               <div style={{ padding: '22px 20px 16px', borderBottom: '1px solid ' + C.border, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <p style={{ fontSize: '32px', fontFamily: serif, fontStyle: 'italic', color: C.text, lineHeight: 1 }}>{d.getDate()}</p>
-                  <p style={{ fontSize: '12px', color: C.textSoft, marginTop: '5px', fontFamily: sans }}>{DAYS_F[d.getDay()]} · {MONTHS[d.getMonth()]}</p>
+                  <p style={{ fontSize: '12px', color: C.textSoft, marginTop: '5px', fontFamily: sans }}>{DAYS_F[d.getDay()]} \u00b7 {MONTHS[d.getMonth()]}</p>
                 </div>
                 <button onClick={function(){setDayPanel(null);}} style={{ background: 'none', border: 'none', color: C.textMuted, fontSize: '20px', cursor: 'pointer' }}>x</button>
               </div>
               <div style={{ padding: '14px 16px' }}>
                 <button onClick={function(){openAdd(dayPanel);}} style={{ width: '100%', marginBottom: '14px', padding: '8px', borderRadius: '50px', border: '1px dashed ' + C.border, background: 'transparent', color: C.textMuted, cursor: 'pointer', fontSize: '12px', fontFamily: sans }}>+ Add event</button>
-                {evs.length === 0
-                  ? <p style={{ color: C.textMuted, fontSize: '13px', textAlign: 'center', paddingTop: '12px', fontFamily: sans }}>Nothing scheduled.</p>
+                {evs.length === 0 ? <p style={{ color: C.textMuted, fontSize: '13px', textAlign: 'center', paddingTop: '12px', fontFamily: sans }}>Nothing scheduled.</p>
                   : <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {evs.map(function(ev) {
-                        return (
-                          <div key={ev.id} onClick={function(){openEdit(ev);}} style={{ padding: '10px 12px', borderRadius: '10px', background: cc(ev.category) + '0d', border: '1px solid ' + cc(ev.category) + '25', cursor: 'pointer', borderLeft: '3px solid ' + cc(ev.category) }}>
-                            <p style={{ fontSize: '13px', fontWeight: 500, color: C.text, fontFamily: sans }}>{ev.title}</p>
-                            {ev.startTime && <p style={{ fontSize: '11px', color: cc(ev.category), marginTop: '2px', fontFamily: sans }}>{fmtTime(ev.startTime)}{ev.endTime ? ' - ' + fmtTime(ev.endTime) : ''}</p>}
-                            <p style={{ fontSize: '10px', color: C.textMuted, marginTop: '2px', fontFamily: sans }}>{ev.category}</p>
-                          </div>
-                        );
-                      })}
+                      {evs.map(function(ev) { return (
+                        <div key={ev.id} onClick={function(){openEdit(ev);}} style={{ padding: '10px 12px', borderRadius: '10px', background: cc(ev.category) + '0d', border: '1px solid ' + cc(ev.category) + '25', cursor: 'pointer', borderLeft: '3px solid ' + cc(ev.category) }}>
+                          <p style={{ fontSize: '13px', fontWeight: 500, color: C.text, fontFamily: sans }}>{ev.title}</p>
+                          {ev.startTime && <p style={{ fontSize: '11px', color: cc(ev.category), marginTop: '2px', fontFamily: sans }}>{fmtTime(ev.startTime)}{ev.endTime ? ' - ' + fmtTime(ev.endTime) : ''}</p>}
+                          <p style={{ fontSize: '10px', color: C.textMuted, marginTop: '2px', fontFamily: sans }}>{ev.category}</p>
+                        </div>
+                      ); })}
                     </div>
                 }
               </div>
@@ -428,7 +334,6 @@ export default function CalendarPage() {
           );
         })()}
       </div>
-
       {showModal && <EventModal form={form} setForm={setForm} onSave={saveEvent} onDelete={deleteEvent} onClose={function(){setShowModal(false);}} isEdit={!!selectedEvent} />}
     </div>
   );

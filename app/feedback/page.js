@@ -40,6 +40,7 @@ export default function FeedbackPage() {
   }
 
   function deleteEntry(id) {
+    if (!confirm('Delete this note?')) return;
     updateData(function(p) { return Object.assign({}, p, { feedback: (p && p.feedback || []).filter(function(e){return e.id !== id;}) }); });
   }
 
@@ -56,7 +57,8 @@ export default function FeedbackPage() {
       </div>
 
       <div style={card}>
-        <p style={{ fontSize: '13px', color: textSoft, fontFamily: sans, marginBottom: '14px', lineHeight: 1.6 }}>Log notes about the app here. When you come back to iterate, everything is in one place.</p>
+        <p style={{ fontSize: '13px', color: textSoft, fontFamily: sans, marginBottom: '6px', lineHeight: 1.6 }}>Log notes about the app here. When you come back to iterate, everything is in one place.</p>
+        <p style={{ fontSize: '12px', color: textMuted, fontFamily: sans, fontStyle: 'italic', marginBottom: '16px', lineHeight: 1.5 }}>Notes saved here are for your reference. Share them with Claude when you're ready to make changes.</p>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
           {CATS.map(function(c) {
             var active = cat === c.id;
@@ -65,7 +67,7 @@ export default function FeedbackPage() {
         </div>
         <textarea value={note} onChange={function(e){setNote(e.target.value);}} placeholder="What do you want to note?" rows={3} style={{ width: '100%', padding: '10px 14px', border: '1px solid rgba(93,66,51,0.12)', borderRadius: '10px', fontSize: '13px', fontFamily: sans, color: text, background: '#FAF7F3', outline: 'none', resize: 'vertical', marginBottom: '10px' }} />
         <button onClick={submit} style={{ width: '100%', padding: '12px', borderRadius: '50px', border: 'none', background: note.trim() ? accentDark : '#EDE5DA', color: note.trim() ? '#fff' : textMuted, fontWeight: 600, cursor: note.trim() ? 'pointer' : 'default', fontSize: '13px', fontFamily: sans }}>
-          {saved ? 'Saved ✓' : 'Save Note'}
+          {saved ? 'Saved \u2713' : 'Save Note'}
         </button>
       </div>
 
@@ -81,7 +83,7 @@ export default function FeedbackPage() {
                   <span style={{ fontSize: '10px', fontWeight: 700, color: c.color, textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: sans }}>{c.label}</span>
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <span style={{ fontSize: '11px', color: textMuted, fontFamily: sans }}>{date}</span>
-                    <button onClick={function(){deleteEntry(e.id);}} style={{ background: 'none', border: 'none', color: textMuted, cursor: 'pointer', fontSize: '14px' }}>×</button>
+                    <button onClick={function(){deleteEntry(e.id);}} style={{ background: 'none', border: 'none', color: textMuted, cursor: 'pointer', fontSize: '14px' }}>\u00d7</button>
                   </div>
                 </div>
                 <p style={{ fontSize: '13px', color: text, lineHeight: 1.6, fontFamily: sans }}>{e.text}</p>
