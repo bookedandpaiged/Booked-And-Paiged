@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useData } from './components/DataProvider';
 import Link from 'next/link';
+import WeatherWidget from './components/WeatherWidget';
 
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 var DAYSOFWEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -313,6 +314,11 @@ export default function HomePage() {
             }
           </div>
         </div>
+      </section>
+
+      {/* WEATHER */}
+      <section style={{ marginBottom: '14px' }}>
+        <WeatherWidget />
       </section>
 
       {/* WEEKLY INSIGHT */}
