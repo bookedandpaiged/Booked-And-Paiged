@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useData } from '../components/DataProvider';
 
 var serif = "'Cormorant Garamond', Georgia, serif";
@@ -141,6 +141,38 @@ export default function GreMbaPage() {
 
   var checked = (data && data.greChecked) || {};
   var scores = (data && data.greScores) || {};
+  var streakDays = (data && data.greStreakDays) || [];
+
+  // Record today as a study day if at least one step is checked
+  useEffect(function() {
+    if (!data) return;
+    var today = new Date().toISOString().slice(0, 10);
+    var hasChecked = Object.values(checked).some(Boolean);
+    if (hasChecked && !streakDays.includes(today)) {
+      updateData(function(p) {
+        var days = (p && p.greStreakDays) || [];
+        return Object.assign({}, p, { greStreakDays: days.concat([today]) });
+      });
+    }
+  }, [checked]);
+
+  function calcStreak(days) {
+    if (!days || days.length === 0) return 0;
+    var sorted = days.slice().sort();
+    var streak = 1;
+    var today = new Date();
+    var last = new Date(sorted[sorted.length - 1]);
+    var diff = Math.floor((today - last) / 86400000);
+    if (diff > 1) return 0;
+    for (var i = sorted.length - 1; i > 0; i--) {
+      var a = new Date(sorted[i]); var b = new Date(sorted[i - 1]);
+      if (Math.floor((a - b) / 86400000) === 1) streak++;
+      else break;
+    }
+    return streak;
+  }
+
+  var streak = calcStreak(streakDays);
 
   function toggle(id) {
     var newChecked = Object.assign({}, checked);
@@ -179,7 +211,7 @@ export default function GreMbaPage() {
 
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginBottom: '20px' }}>
-        {[[doneToday + '', 'Done today'], ['0', 'Day streak'], [allDaySteps.length + '', 'Steps today'], [weekProg.p + '%', 'Week done']].map(function(s, i) {
+        {[[doneToday + '', 'Done today'], [streak + (streak === 1 ? ' day' : ' days'), 'Study streak'], [allDaySteps.length + '', 'Steps today'], [weekProg.p + '%', 'Week done']].map(function(s, i) {
           return <div key={i} style={{ background: '#fff', borderRadius: '12px', padding: '14px 10px', textAlign: 'center', border: '1px solid rgba(93,66,51,0.06)' }}>
             <p style={{ fontSize: '26px', fontWeight: 600, color: i === 1 ? accentDark : brown, lineHeight: 1, fontFamily: sans }}>{s[0]}</p>
             <p style={{ fontSize: '11px', color: textMuted, marginTop: '4px', fontFamily: sans }}>{s[1]}</p>

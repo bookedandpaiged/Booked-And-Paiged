@@ -14,6 +14,8 @@ var NAV_ITEMS = [
 
 var MORE_ITEMS = [
   { href: '/reminders', label: 'Reminders' },
+  { href: '/habits', label: 'Habit Tracker' },
+  { href: '/notes', label: 'Notes' },
   { href: '/review', label: 'Weekly Review' },
   { href: '/vacation', label: 'Vacation' },
   { href: '/feedback', label: 'Feedback' },
