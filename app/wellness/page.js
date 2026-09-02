@@ -11,7 +11,7 @@ var card = { background: '#FFFFFF', border: '1px solid rgba(93,66,51,0.06)', bor
 var cardTitle = { fontFamily: sans, fontSize: '15px', fontWeight: 600, color: brown, marginBottom: '14px', paddingBottom: '10px', borderBottom: '1px solid rgba(93,66,51,0.06)' };
 var inp = { width: '100%', padding: '9px 12px', border: '1px solid rgba(93,66,51,0.12)', borderRadius: '8px', fontSize: '13px', fontFamily: sans, color: text, background: '#FAF7F3', outline: 'none', marginBottom: '0' };
 
-var TABS = ['Workout', 'Meals', 'Skin', 'Grocery', 'Prep'];
+var TABS = ['Workout', 'Meals', 'Skin', 'Grocery', 'Prep', 'Past Weeks'];
 
 var PANTRY_ITEMS = [
   'Coffee Mate French Vanilla', 'Oikos Pro vanilla yogurt', 'Thorne Creatine',
@@ -459,6 +459,63 @@ export default function WellnessPage() {
       )}
 
       {showPlanModal && <PlanNewWeekModal onClose={function(){setShowPlanModal(false);}} onComplete={onPlanComplete} />}
+
+      {/* PAST WEEKS */}
+      {tab === 'Past Weeks' && (
+        <div>
+          {pastWeeks.length === 0 ? (
+            <div style={{ ...card, textAlign: 'center', padding: '48px 24px' }}>
+              <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '20px', color: brown, marginBottom: '8px' }}>No past weeks yet</p>
+              <p style={{ fontSize: '13px', color: textSoft, fontFamily: sans }}>When you plan a new week, the current one gets archived here automatically.</p>
+            </div>
+          ) : pastWeeks.map(function(week, i) {
+            var archived = new Date(week.archivedAt);
+            var dateStr = archived.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            var openState = useState(false);
+            var open = openState[0]; var setOpen = openState[1];
+            return (
+              <div key={i} style={card}>
+                <button onClick={function(){setOpen(!open);}} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                  <div style={{ textAlign: 'left' }}>
+                    <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '18px', color: brown }}>{week.title}</p>
+                    <p style={{ fontSize: '12px', color: textMuted, fontFamily: sans, marginTop: '3px' }}>Archived {dateStr}</p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 600, background: '#EDE5DA', color: accent, borderRadius: '6px', padding: '3px 10px', fontFamily: sans }}>{week.phase ? week.phase.split('·')[0].trim() : ''}</span>
+                    <span style={{ fontSize: '16px', color: textMuted, transform: open ? 'rotate(180deg)' : 'none', display: 'inline-block', transition: 'transform 0.2s' }}>&#9660;</span>
+                  </div>
+                </button>
+                {open && (
+                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(93,66,51,0.06)' }}>
+                    <p style={{ fontSize: '13px', color: textSoft, fontFamily: sans, marginBottom: '14px', lineHeight: 1.6 }}>{week.overview}</p>
+                    {week.workouts && (
+                      <div style={{ marginBottom: '14px' }}>
+                        <p style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: accent, marginBottom: '8px', fontFamily: sans }}>Workouts</p>
+                        {week.workouts.map(function(w, j) {
+                          return <div key={j} style={{ display: 'flex', gap: '10px', padding: '6px 0', borderBottom: '1px solid rgba(93,66,51,0.04)' }}>
+                            <span style={{ fontSize: '12px', fontWeight: 600, color: brown, minWidth: '40px', fontFamily: sans }}>{w.day}</span>
+                            <span style={{ fontSize: '12px', color: text, fontFamily: sans }}>{w.label}</span>
+                          </div>;
+                        })}
+                      </div>
+                    )}
+                    {week.meals && week.meals.macros && (
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px' }}>
+                        {[['calories','Cal'],['protein','Pro'],['carbs','Carb'],['fat','Fat']].map(function(m) {
+                          return <div key={m[0]} style={{ background: '#EDE5DA', borderRadius: '8px', padding: '10px 6px', textAlign: 'center' }}>
+                            <p style={{ fontSize: '16px', fontWeight: 700, color: brown, fontFamily: sans }}>{week.meals.macros[m[0]]}</p>
+                            <p style={{ fontSize: '10px', color: textMuted, fontFamily: sans }}>{m[1]}</p>
+                          </div>;
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

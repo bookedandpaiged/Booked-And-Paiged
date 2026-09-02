@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
+import GlobalSearch from './GlobalSearch';
 
 var NAV_ITEMS = [
   { href: '/', label: 'Dashboard' },
@@ -50,6 +51,9 @@ export default function Sidebar() {
   var desktopMoreState = useState(false);
   var desktopMore = desktopMoreState[0];
   var setDesktopMore = desktopMoreState[1];
+  var searchOpenState = useState(false);
+  var searchOpen = searchOpenState[0];
+  var setSearchOpen = searchOpenState[1];
 
   function isActive(href) {
     if (href === '/') return pathname === '/';
@@ -132,6 +136,9 @@ export default function Sidebar() {
               <Link href="/notifications" style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: 'none', background: 'transparent', color: 'rgba(61,46,34,0.45)', cursor: 'pointer', textDecoration: 'none' }} aria-label="Notifications">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
               </Link>
+              <button onClick={function(){setSearchOpen(true);}} style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: 'none', background: 'transparent', color: 'rgba(61,46,34,0.45)', cursor: 'pointer' }} aria-label="Search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              </button>
               <Link href="/settings" style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#9C7B65', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>P</Link>
             </div>
           </div>
@@ -210,6 +217,7 @@ export default function Sidebar() {
           header { display: none !important; }
         }
       `}</style>
+      {searchOpen && <GlobalSearch onClose={function(){setSearchOpen(false);}} />}
     </>
   );
 }
