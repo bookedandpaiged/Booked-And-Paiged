@@ -112,7 +112,16 @@ export default function RemindersPage() {
   }
 
   function toggleBillPaid(id) {
-    updateBills(function(bs) { return bs.map(function(b) { return b.id === id ? Object.assign({}, b, { paid: !b.paid }) : b; }); });
+    updateBills(function(bs) { return bs.map(function(b) { return b.id === id ? Object.assign({}, b, { paid: !b.paid, paidAt: !b.paid ? new Date().toISOString() : null }) : b; }); });
+  }
+
+  function updateBillField(id, field, val) {
+    updateBills(function(bs) { return bs.map(function(b) { return b.id === id ? Object.assign({}, b, { [field]: val }) : b; }); });
+  }
+
+  function deleteBill(id) {
+    if (!confirm('Remove this bill?')) return;
+    updateBills(function(bs) { return bs.filter(function(b) { return b.id !== id; }); });
   }
 
   function toggleCleaning(id) {
@@ -204,15 +213,27 @@ export default function RemindersPage() {
             var days = daysTillDue(b.dueDay);
             var urgent = days <= 3 && !b.paid;
             return (
-              <div key={b.id} style={{ ...card, borderLeft: '3px solid ' + (b.paid ? '#5a9870' : urgent ? '#C94040' : accentDark), display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: '14px', fontWeight: 600, color: b.paid ? textMuted : brown, fontFamily: sans, textDecoration: b.paid ? 'line-through' : 'none' }}>{b.label}</p>
-                  <p style={{ fontSize: '12px', color: textSoft, marginTop: '2px', fontFamily: sans }}>Due on the {b.dueDay}{b.dueDay === 1 ? 'st' : b.dueDay === 2 ? 'nd' : b.dueDay === 3 ? 'rd' : 'th'} of each month</p>
-                  {b.amount && <p style={{ fontSize: '12px', color: accent, marginTop: '2px', fontFamily: sans }}>${b.amount}</p>}
+              <div key={b.id} style={{ ...card, borderLeft: '3px solid ' + (b.paid ? '#5a9870' : urgent ? '#C94040' : accentDark) }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                  <div style={{ flex: 1 }}>
+                    <input value={b.label} onChange={function(e){updateBillField(b.id,'label',e.target.value);}} style={{ fontSize: '14px', fontWeight: 600, color: b.paid ? textMuted : brown, fontFamily: sans, textDecoration: b.paid ? 'line-through' : 'none', border: 'none', background: 'transparent', outline: 'none', width: '100%', padding: 0 }} />
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '6px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '12px', color: textSoft, fontFamily: sans }}>Due the</span>
+                      <input type="number" min="1" max="31" value={b.dueDay} onChange={function(e){updateBillField(b.id,'dueDay',parseInt(e.target.value)||1);}} style={{ width: '44px', fontSize: '12px', color: textSoft, fontFamily: sans, border: '1px solid rgba(93,66,51,0.12)', borderRadius: '6px', padding: '2px 6px', background: '#FAF7F3', outline: 'none', textAlign: 'center' }} />
+                      <span style={{ fontSize: '12px', color: textSoft, fontFamily: sans }}>of each month</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ fontSize: '12px', color: textSoft, fontFamily: sans }}>$</span>
+                        <input value={b.amount || ''} onChange={function(e){updateBillField(b.id,'amount',e.target.value);}} placeholder="amount" style={{ width: '70px', fontSize: '12px', color: accent, fontFamily: sans, border: '1px solid rgba(93,66,51,0.12)', borderRadius: '6px', padding: '2px 6px', background: '#FAF7F3', outline: 'none' }} />
+                      </div>
+                    </div>
+                    {b.paidAt && <p style={{ fontSize: '11px', color: '#5a9870', marginTop: '4px', fontFamily: sans }}>Paid {formatShortDate(new Date(b.paidAt))} ✓</p>}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px', flexShrink: 0 }}>
+                    {!b.paid && <p style={{ fontSize: '11px', fontWeight: 700, color: urgent ? '#C94040' : textSoft, fontFamily: sans }}>Due in {days} day{days !== 1 ? 's' : ''}</p>}
+                    <button onClick={function(){toggleBillPaid(b.id);}} style={{ padding: '6px 14px', borderRadius: '20px', border: '1px solid rgba(93,66,51,0.12)', background: b.paid ? '#e8f5f0' : 'transparent', color: b.paid ? '#2a8f65' : textSoft, fontSize: '11px', fontWeight: 600, cursor: 'pointer', fontFamily: sans }}>{b.paid ? 'Paid ✓ Undo' : 'Mark Paid'}</button>
+                    <button onClick={function(){deleteBill(b.id);}} style={{ background: 'none', border: 'none', color: textMuted, cursor: 'pointer', fontSize: '11px', fontFamily: sans }}>Remove</button>
+                  </div>
                 </div>
-                {!b.paid && <p style={{ fontSize: '11px', fontWeight: 700, color: urgent ? '#C94040' : textSoft, fontFamily: sans, flexShrink: 0 }}>Due in {days} day{days !== 1 ? 's' : ''}</p>}
-                {b.paid && <p style={{ fontSize: '11px', fontWeight: 700, color: '#5a9870', fontFamily: sans }}>Paid ✓</p>}
-                <button onClick={function(){toggleBillPaid(b.id);}} style={{ padding: '6px 14px', borderRadius: '20px', border: '1px solid rgba(93,66,51,0.12)', background: b.paid ? '#e8f5f0' : 'transparent', color: b.paid ? '#2a8f65' : textSoft, fontSize: '11px', fontWeight: 600, cursor: 'pointer', fontFamily: sans, flexShrink: 0 }}>{b.paid ? 'Undo' : 'Mark Paid'}</button>
               </div>
             );
           })}

@@ -161,7 +161,7 @@ export default function AwardsPage() {
 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: '3px', background: '#EDE5DA', borderRadius: '10px', padding: '3px', marginBottom: '20px', border: '1px solid rgba(93,66,51,0.06)' }}>
-        {[['details','Award Details'],['tasks','Task List'],['daily','Daily Checklist']].map(function(v) {
+        {[['details','Award Details'],['tasks','Task List'],['daily','Daily Checklist'],['timeline','Timeline']].map(function(v) {
           var active = tab === v[0];
           return <button key={v[0]} onClick={function(){setTab(v[0]);}} style={{ flex: 1, fontFamily: sans, fontSize: '13px', fontWeight: active ? 600 : 400, padding: '9px 6px', borderRadius: '8px', border: 'none', background: active ? '#fff' : 'transparent', color: active ? brown : textSoft, cursor: 'pointer', boxShadow: active ? '0 1px 4px rgba(0,0,0,0.06)' : 'none' }}>{v[1]}</button>;
         })}
@@ -283,6 +283,86 @@ export default function AwardsPage() {
           })}
         </div>
       )}
+      {/* TIMELINE */}
+      {tab === 'timeline' && (function() {
+        var TIMELINE = [
+          { month: 'May 2026', events: [
+            { color: '#7B6FD4', label: 'Stevie Women in Business', detail: 'Entry kit opens', type: 'open' },
+            { color: '#7B6FD4', label: 'Stevie G25 & C27', detail: 'Entry kit opens', type: 'open' },
+          ]},
+          { month: 'Jun 2026', events: [
+            { color: '#9C7B65', label: 'All Awards', detail: 'Verify ColorComm + HBCU timelines, gather metrics, start evidence bank', type: 'prep' },
+            { color: '#7B6FD4', label: 'Stevie Women', detail: 'Begin drafting Questions A, B, C', type: 'draft' },
+          ]},
+          { month: 'Jul 2026', events: [
+            { color: '#7B6FD4', label: 'Stevie Women', detail: 'Complete drafts, send to reviewers', type: 'review' },
+            { color: '#7B6FD4', label: 'Stevie G25 & C27', detail: 'Draft campaign narratives', type: 'draft' },
+            { color: '#D4842B', label: 'MarCom Awards', detail: 'Prep work samples and about project note', type: 'prep' },
+            { color: '#9C7B65', label: 'Register GRE', detail: 'Book Aug 8 exam date by Jul 1', type: 'deadline' },
+          ]},
+          { month: 'Aug 2026', events: [
+            { color: '#7B6FD4', label: 'Stevie Submission', detail: 'Submit by Aug-Sept deadline', type: 'deadline' },
+            { color: '#D4842B', label: 'MarCom Opens', detail: 'Opens Aug 1 — enter immediately', type: 'open' },
+            { color: '#9C7B65', label: 'GRE Exam', detail: 'August 8, 2026', type: 'deadline' },
+          ]},
+          { month: 'Sept 2026', events: [
+            { color: '#7B6FD4', label: 'Stevie Deadline', detail: 'Hard deadline ~Sept 2026', type: 'deadline' },
+            { color: '#D4842B', label: 'MarCom Deadline', detail: 'September 17, 2026 — submit both entries', type: 'deadline' },
+            { color: '#2a8f65', label: 'ColorComm', detail: 'Submit by deadline if confirmed', type: 'deadline' },
+            { color: '#C94040', label: 'HBCU Power', detail: 'Submit by deadline if confirmed', type: 'deadline' },
+          ]},
+        ];
+
+        var TYPE_ICONS = { open: '🟢', prep: '🔵', draft: '✏️', review: '👁️', deadline: '🔴' };
+        var TYPE_LABELS = { open: 'Opens', prep: 'Prep', draft: 'Drafting', review: 'Review', deadline: 'Deadline' };
+        var now = new Date();
+        var nowMonth = now.getFullYear() * 12 + now.getMonth();
+
+        return (
+          <div>
+            <div style={{ ...card, background: '#FAF7F3', padding: '14px 18px', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+                {Object.entries(TYPE_LABELS).map(function(e) { return <span key={e[0]} style={{ fontSize: '11px', color: textSoft, fontFamily: sans }}>{TYPE_ICONS[e[0]]} {e[1]}</span>; })}
+              </div>
+            </div>
+            {TIMELINE.map(function(month, mi) {
+              var parts = month.month.split(' ');
+              var monthNum = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].indexOf(parts[0]);
+              var yearNum = parseInt(parts[1]);
+              var monthIdx = yearNum * 12 + monthNum;
+              var isPast = monthIdx < nowMonth;
+              var isCurrent = monthIdx === nowMonth;
+              return (
+                <div key={mi} style={{ display: 'flex', gap: '18px', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: isCurrent ? accentDark : isPast ? '#EDE5DA' : '#fff', border: '2px solid ' + (isCurrent ? accentDark : 'rgba(93,66,51,0.1)'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <p style={{ fontSize: '10px', fontWeight: 700, color: isCurrent ? '#fff' : isPast ? textMuted : brown, textAlign: 'center', lineHeight: 1.2, fontFamily: sans }}>{parts[0]}<br/>{parts[1].slice(2)}</p>
+                    </div>
+                    {mi < TIMELINE.length - 1 && <div style={{ width: '2px', flex: 1, background: 'rgba(93,66,51,0.08)', marginTop: '4px', minHeight: '20px' }} />}
+                  </div>
+                  <div style={{ flex: 1, paddingTop: '8px' }}>
+                    {month.events.map(function(ev, ei) {
+                      return (
+                        <div key={ei} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '8px', padding: '10px 14px', background: '#fff', borderRadius: '10px', border: '1px solid rgba(93,66,51,0.05)', opacity: isPast ? 0.55 : 1 }}>
+                          <span style={{ fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>{TYPE_ICONS[ev.type]}</span>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px', flexWrap: 'wrap' }}>
+                              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: ev.color, flexShrink: 0 }} />
+                              <p style={{ fontSize: '13px', fontWeight: 600, color: brown, fontFamily: sans }}>{ev.label}</p>
+                              <span style={{ fontSize: '10px', fontWeight: 600, color: ev.type === 'deadline' ? '#C94040' : accent, textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: sans }}>{TYPE_LABELS[ev.type]}</span>
+                            </div>
+                            <p style={{ fontSize: '12px', color: textSoft, fontFamily: sans, marginLeft: '16px' }}>{ev.detail}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })()}
     </div>
   );
 }
