@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useData } from './components/DataProvider';
 import Link from 'next/link';
 import WeatherWidget from './components/WeatherWidget';
@@ -116,6 +116,17 @@ export default function HomePage() {
   var loading = dataCtx.loading;
   var editIntentions = useState(false);
   var isEditing = editIntentions[0]; var setIsEditing = editIntentions[1];
+  var photosState = useState([]);
+  var photos = photosState[0]; var setPhotos = photosState[1];
+
+  useEffect(function() {
+    var key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
+    if (!key) return;
+    fetch('https://api.unsplash.com/photos/random?count=5&query=wellness+lifestyle+aesthetic+woman&orientation=landscape&client_id=' + key)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (Array.isArray(data)) setPhotos(data); })
+      .catch(function() {});
+  }, []);
 
   var now = new Date();
   var hour = now.getHours();
@@ -168,14 +179,29 @@ export default function HomePage() {
           <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: textSoft, marginTop: '18px', fontFamily: sans }}>{dateStr}</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '140px 120px 120px', gap: '5px', borderRadius: '20px', overflow: 'hidden' }}>
-          <div style={{ gridRow: 'span 2', background: 'linear-gradient(160deg, #D4C5B5 0%, #B8A090 100%)', display: 'flex', alignItems: 'flex-end', padding: '20px' }}>
-            <span style={{ fontFamily: serif, fontSize: '13px', fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>Images load with<br/>Unsplash integration</span>
-          </div>
-          <div style={{ background: 'linear-gradient(135deg, #E8DDD2 0%, #D4C5B5 100%)' }} />
-          <div style={{ background: 'linear-gradient(135deg, #C4A98E 0%, #9C7B65 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.85)', textAlign: 'center', lineHeight: 1.45, padding: '12px' }}>own lane.<br/>own race.<br/>own pace.</span>
-          </div>
-          <div style={{ gridColumn: 'span 2', background: 'linear-gradient(135deg, #E2D6CA 0%, #C4A98E 100%)' }} />
+          {photos.length >= 5 ? (
+            <>
+              <div style={{ gridRow: 'span 2', backgroundImage: 'url(' + photos[0].urls.regular + ')', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(61,46,34,0.3) 0%, transparent 60%)' }} />
+              </div>
+              <div style={{ backgroundImage: 'url(' + photos[1].urls.regular + ')', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+              <div style={{ backgroundImage: 'url(' + photos[2].urls.regular + ')', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ position: 'absolute', inset: 0, background: 'rgba(61,46,34,0.25)' }} />
+                <span style={{ position: 'relative', fontFamily: serif, fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.9)', textAlign: 'center', lineHeight: 1.45, padding: '12px' }}>own lane.<br/>own race.<br/>own pace.</span>
+              </div>
+              <div style={{ backgroundImage: 'url(' + photos[3].urls.regular + ')', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+              <div style={{ backgroundImage: 'url(' + photos[4].urls.regular + ')', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+            </>
+          ) : (
+            <>
+              <div style={{ gridRow: 'span 2', background: 'linear-gradient(160deg, #D4C5B5 0%, #B8A090 100%)' }} />
+              <div style={{ background: 'linear-gradient(135deg, #E8DDD2 0%, #D4C5B5 100%)' }} />
+              <div style={{ background: 'linear-gradient(135deg, #C4A98E 0%, #9C7B65 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontFamily: serif, fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.85)', textAlign: 'center', lineHeight: 1.45, padding: '12px' }}>own lane.<br/>own race.<br/>own pace.</span>
+              </div>
+              <div style={{ gridColumn: 'span 2', background: 'linear-gradient(135deg, #E2D6CA 0%, #C4A98E 100%)' }} />
+            </>
+          )}
         </div>
       </section>
 
