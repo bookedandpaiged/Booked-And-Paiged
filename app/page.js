@@ -122,7 +122,25 @@ export default function HomePage() {
   useEffect(function() {
     var key = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
     if (!key) return;
-    fetch('https://api.unsplash.com/photos/random?count=5&query=wellness+lifestyle+aesthetic+woman&orientation=landscape&client_id=' + key)
+    var queries = [
+      'black woman travel luxury',
+      'black couple aesthetic love',
+      'black woman fashion editorial',
+      'luxury interior design home',
+      'black art portrait painting',
+      'black woman fitness gym',
+      'autumn fall cozy lifestyle',
+      'luxury hotel travel lifestyle',
+      'black woman natural hair beauty',
+      'black friends dinner restaurant',
+      'luxury spa self care wellness',
+      'black woman boss office',
+      'tropical travel adventure woman',
+      'black couple luxury lifestyle',
+      'modern interior architecture home',
+    ];
+    var q = queries[Math.floor(Math.random() * queries.length)];
+    fetch('https://api.unsplash.com/photos/random?count=5&query=' + encodeURIComponent(q) + '&client_id=' + key)
       .then(function(r) { return r.json(); })
       .then(function(data) { if (Array.isArray(data)) setPhotos(data); })
       .catch(function() {});
