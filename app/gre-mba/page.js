@@ -182,11 +182,19 @@ export default function GreMbaPage() {
 
   function saveScore(key, val) {
     var v = parseInt(val);
-    if (v >= 130 && v <= 170) {
-      var newScores = Object.assign({}, scores);
-      newScores[key] = v;
-      updateData(function(prev) { return Object.assign({}, prev, { greScores: newScores }); });
+    var el = document.getElementById('score-err-' + key);
+    if (!val || val === '') {
+      if (el) el.style.display = 'none';
+      return;
     }
+    if (isNaN(v) || v < 130 || v > 170) {
+      if (el) { el.style.display = 'block'; el.textContent = 'GRE scores range from 130 to 170.'; }
+      return;
+    }
+    if (el) el.style.display = 'none';
+    var newScores = Object.assign({}, scores);
+    newScores[key] = v;
+    updateData(function(prev) { return Object.assign({}, prev, { greScores: newScores }); });
   }
 
   if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}><p style={{ color: textSoft, fontFamily: serif, fontStyle: 'italic' }}>Loading...</p></div>;
@@ -349,10 +357,12 @@ export default function GreMbaPage() {
               <div>
                 <label style={{ fontSize: '11px', color: textSoft, display: 'block', marginBottom: '5px', fontFamily: sans }}>Verbal (130-170)</label>
                 <input type="number" min="130" max="170" defaultValue={vScore || ''} placeholder="e.g. 152" onChange={function(e){saveScore('v', e.target.value);}} style={{ width: '100%', padding: '8px 12px', fontSize: '14px', border: '1px solid rgba(93,66,51,0.15)', borderRadius: '8px', background: '#FAF7F3', color: brown, fontFamily: sans, outline: 'none' }} />
+                <p id="score-err-v" style={{ display: 'none', fontSize: '11px', color: '#C94040', marginTop: '4px', fontFamily: sans }} />
               </div>
               <div>
                 <label style={{ fontSize: '11px', color: textSoft, display: 'block', marginBottom: '5px', fontFamily: sans }}>Quant (130-170)</label>
                 <input type="number" min="130" max="170" defaultValue={qScore || ''} placeholder="e.g. 148" onChange={function(e){saveScore('q', e.target.value);}} style={{ width: '100%', padding: '8px 12px', fontSize: '14px', border: '1px solid rgba(93,66,51,0.15)', borderRadius: '8px', background: '#FAF7F3', color: brown, fontFamily: sans, outline: 'none' }} />
+                <p id="score-err-q" style={{ display: 'none', fontSize: '11px', color: '#C94040', marginTop: '4px', fontFamily: sans }} />
               </div>
             </div>
           </div>
