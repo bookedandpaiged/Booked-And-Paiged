@@ -238,10 +238,13 @@ a:hover { color: var(--accent); }
 
 /* Responsive */
 @media (max-width: 768px) {
+  .hero-collage {
+    display: none !important;
+  }
   .main-content {
     padding: 16px;
-    padding-top: 80px;
-    padding-bottom: 32px;
+    padding-top: 24px;
+    padding-bottom: 96px;
     max-width: 100%;
   }
 

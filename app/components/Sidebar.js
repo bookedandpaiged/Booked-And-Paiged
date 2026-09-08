@@ -168,9 +168,21 @@ export default function Sidebar() {
       {mobileMoreOpen && (
         <div className="mobile-more-overlay" onClick={function() { setMobileMoreOpen(false); }}>
           <div className="mobile-more-sheet" onClick={function(e) { e.stopPropagation(); }}>
-            {[].concat(NAV_ITEMS.slice(3), MORE_ITEMS).map(function(item) {
-              return <Link key={item.href} href={item.href} className="mobile-more-item" onClick={function() { setMobileMoreOpen(false); }}>{item.label}</Link>;
-            })}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid rgba(61,46,34,0.06)' }}>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '18px', color: '#5D4233' }}>More</p>
+              <button onClick={function(){setMobileMoreOpen(false);}} style={{ background: 'none', border: 'none', fontSize: '22px', color: 'rgba(61,46,34,0.35)', cursor: 'pointer', lineHeight: 1 }}>×</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+              {[].concat(NAV_ITEMS.slice(3), MORE_ITEMS).map(function(item) {
+                return (
+                  <Link key={item.href} href={item.href}
+                    style={{ display: 'block', padding: '14px 16px', fontSize: '14px', fontWeight: 400, color: '#3D2E22', borderRadius: '12px', textDecoration: 'none', background: '#FAF7F3', fontFamily: "'Satoshi', sans-serif" }}
+                    onClick={function() { setMobileMoreOpen(false); }}>
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

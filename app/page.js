@@ -196,7 +196,7 @@ export default function HomePage() {
           </Link>
           <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: textSoft, marginTop: '18px', fontFamily: sans }}>{dateStr}</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '140px 120px 120px', gap: '5px', borderRadius: '20px', overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '140px 120px 120px', gap: '5px', borderRadius: '20px', overflow: 'hidden' }} className="hero-collage">
           {photos.length >= 5 ? (
             <>
               <div style={{ gridRow: 'span 2', backgroundImage: 'url(' + photos[0].urls.regular + ')', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
